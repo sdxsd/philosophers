@@ -95,3 +95,9 @@ t_philo	**init_philosophers(int n_philos)
 	}
 	return (philosophers_db);
 }
+
+/* >be philosopher */
+be_philosopher(t_philo *philo)
+{
+
+}

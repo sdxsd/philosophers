@@ -40,6 +40,7 @@ A program is free software if users have all of these freedoms.
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 # include <pthread.h>
+# include <semaphore.h>
 # define TRUE 1
 # define FALSE 0
 
@@ -57,6 +58,11 @@ typedef struct s_philo {
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 } t_philo;
+
+typedef struct	s_table {
+	int		philo_count;
+	t_philo	**philo_db;
+} t_table;
 
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);
 t_philo	**init_philosophers(int n_philos);
