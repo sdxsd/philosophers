@@ -84,6 +84,7 @@ void	*be_philosopher(void *p)
 
 	philo = (t_philo *)p;
 	table = (t_table *)philo->table;
+	printf("NEW THREAD: %ld\n", philo->index);
 	if (philo->index % 2)
 		usleep(1024);
 	while (TRUE)
