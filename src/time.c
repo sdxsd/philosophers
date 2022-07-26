@@ -38,7 +38,7 @@ size_t	mic_to_mil(int mic_seconds)
 	return (mic_seconds * 1000);
 }
 
-size_t exact_time()
+size_t exact_time(void)
 {
 	struct timeval	time;
 

@@ -37,8 +37,24 @@ The definition of Free Software is as follows:
 A program is free software if users have all of these freedoms.
 */
 
+/* The philosophers dining problem was first invented by Edsgar Dijkstra */
+/* Dutch computer scientist. */
+
 #include "../include/philosophers.h"
 #include <stdlib.h>
+#include <stdio.h>
+
+void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
+{
+	pthread_mutex_lock(t->prnt_lck);
+	if (state == sleeping)
+		printf("%ld %ld is sleeping", milsec, index);
+	else if (state == eating)
+		printf("%ld %ld is eating", milsec, index);
+	else if (state == thinking)
+		printf("%ld %ld is thinking", milsec, index);
+	pthread_mutex_unlock(t->prnt_lck);
+}
 
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 {
@@ -97,7 +113,3 @@ t_philo	**init_philosophers(int n_philos)
 }
 
 /* >be philosopher */
-be_philosopher(t_philo *philo)
-{
-
-}

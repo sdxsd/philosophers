@@ -51,8 +51,9 @@ enum e_states {
 };
 
 typedef struct s_philo {
-	int	state;
-	int	index;
+	size_t			state;
+	size_t			index;
+	size_t			hunger;
 	struct s_philo	*l_philo;
 	struct s_philo	*r_philo;
 	pthread_mutex_t	*l_fork;
@@ -60,11 +61,18 @@ typedef struct s_philo {
 } t_philo;
 
 typedef struct	s_table {
-	int		philo_count;
-	t_philo	**philo_db;
+	pthread_mutex_t	*prnt_lck;
+	t_philo			**philo_db;
+	int				philo_count;
 } t_table;
 
+/* PHILOSOPHER FUNCTIONS */
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);
 t_philo	**init_philosophers(int n_philos);
+
+/* TIME FUNCTIONS */
+size_t	sec_to_mil(int seconds);
+size_t	mic_to_mil(int mic_seconds);
+size_t exact_time(void);
 
 # endif // PHILOSOPHERS_H
