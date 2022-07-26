@@ -43,10 +43,18 @@ A program is free software if users have all of these freedoms.
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 {
 	t_philo	*new_philo;
+	int		ret;
 
 	new_philo = malloc(sizeof(t_philo));
 	new_philo->state = sleeping;
 	new_philo->index = index;
 	new_philo->l_philo = l_philo;
 	new_philo->r_philo = r_philo;
+	if (index == 1)
+		new_philo->l_fork = NULL;
+	else
+		new_philo->l_fork = l_philo->r_fork;
+	ret = pthread_mutex_init(new_philo->r_fork, NULL);
+	if (ret > 0)
+		return (NULL);
 }
