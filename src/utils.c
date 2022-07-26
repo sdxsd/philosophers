@@ -38,21 +38,41 @@ A program is free software if users have all of these freedoms.
 */
 
 #include "../include/philosophers.h"
-#include <stdlib.h>
 
-int	init_threads(int n_philo, t_philo **p_db, t_table *t)
+static int	ft_isspace(char c)
 {
-	int			iter;
-	pthread_t	**threads;
+	if (c == ' ' || c == '\t' || c == '\n' \
+	|| c == '\v' || c == '\f' || c == '\r' || c == '\b')
+		return (TRUE);
+	else
+		return (FALSE);
+}
 
-	iter = 0;
-	threads = malloc(sizeof(pthread_t) * n_philo);
-	while (iter < n_philo)
+int	ft_atoi(const char *str)
+{
+	int	iterator;
+	int	nbr;
+	int	minus;
+
+	nbr = 0;
+	iterator = 0;
+	while (ft_isspace(str[iterator]) == 1)
+		iterator++;
+	if (str[iterator] == '-' || str[iterator] == '+')
 	{
-		p_db[iter]->table = (void *)t;
-		pthread_create(threads[iter], NULL,\
-					   (*be_philosopher)(p_db[iter]), p_db[iter]);
-		iter++;
+		if (str[iterator] == '-')
+			minus = -1;
+		if (str[iterator + 1] == '+' || str[iterator + 1] == '-')
+			return (0);
+		++iterator;
 	}
-	return (FALSE);
+	while (str[iterator] >= '0' && str[iterator] <= '9')
+	{
+		nbr *= 10;
+		nbr += (int)str[iterator] - '0';
+		++iterator;
+	}
+	if (minus == -1)
+		nbr = (nbr - (nbr * 2));
+	return (nbr);
 }
