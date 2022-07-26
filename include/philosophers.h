@@ -58,5 +58,7 @@ typedef struct s_philo {
 	pthread_mutex_t	*r_fork;
 } t_philo;
 
+t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);
+t_philo	**init_philosophers(int n_philos);
 
 # endif // PHILOSOPHERS_H

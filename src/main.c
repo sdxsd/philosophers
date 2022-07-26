@@ -36,3 +36,14 @@ The definition of Free Software is as follows:
 
 A program is free software if users have all of these freedoms.
 */
+
+#include "../include/philosophers.h"
+
+int	main()
+{
+	t_philo **philosophers_db;
+
+	philosophers_db = init_philosophers(5);
+	if (!philosophers_db)
+		return (1);
+}
