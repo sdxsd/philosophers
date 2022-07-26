@@ -40,7 +40,7 @@ A program is free software if users have all of these freedoms.
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 # include <pthread.h>
-# include <semaphore.h>
+# include <stdbool.h>
 # define TRUE 1
 # define FALSE 0
 
@@ -51,6 +51,7 @@ enum e_states {
 };
 
 typedef struct s_philo {
+	size_t			eat_cnt;
 	size_t			state;
 	size_t			index;
 	size_t			hunger;
@@ -63,10 +64,12 @@ typedef struct s_philo {
 typedef struct	s_table {
 	pthread_mutex_t	*prnt_lck;
 	t_philo			**philo_db;
-	size_t			philo_count;
+	size_t			n_philo;
 	size_t			time_to_die;
 	size_t			time_to_sleep;
 	size_t			time_to_eat;
+	size_t			eat_count;
+	bool			death;
 } t_table;
 
 /* PHILOSOPHER FUNCTIONS */

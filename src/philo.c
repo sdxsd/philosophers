@@ -42,19 +42,6 @@ A program is free software if users have all of these freedoms.
 
 #include "../include/philosophers.h"
 #include <stdlib.h>
-#include <stdio.h>
-
-void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
-{
-	pthread_mutex_lock(t->prnt_lck);
-	if (state == sleeping)
-		printf("%ld %ld is sleeping", milsec, index);
-	else if (state == eating)
-		printf("%ld %ld is eating", milsec, index);
-	else
-		printf("%ld %ld is thinking", milsec, index);
-	pthread_mutex_unlock(t->prnt_lck);
-}
 
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 {
@@ -68,7 +55,7 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	new_philo->index = index;
 	new_philo->l_philo = l_philo;
 	new_philo->r_philo = r_philo;
-	if (index == 0)
+	if (index == 1)
 		;
 	else
 		new_philo->l_fork = l_philo->r_fork;
@@ -90,7 +77,7 @@ t_philo	**init_philosophers(int n_philos)
 	philosophers_db = malloc(sizeof(t_philo *) * n_philos);
 	if (!philosophers_db)
 		return (NULL);
-	initial_philo = init_philosopher(NULL, NULL, 0);
+	initial_philo = init_philosopher(NULL, NULL, 1);
 	if (!initial_philo)
 		return (NULL);
 	philo_1 = initial_philo;
@@ -98,7 +85,7 @@ t_philo	**init_philosophers(int n_philos)
 	iter = 1;
 	while (iter < n_philos)
 	{
-		philo_2 = init_philosopher(philo_1, NULL, iter);
+		philo_2 = init_philosopher(philo_1, NULL, iter + 1);
 		if (!philo_2)
 			return (NULL);
 		else

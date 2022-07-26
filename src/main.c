@@ -38,12 +38,27 @@ A program is free software if users have all of these freedoms.
 */
 
 #include "../include/philosophers.h"
+#include <stdlib.h>
 
-int	main()
+t_table	*construct_table(int n_p, int t_e, int t_d, int t_s, int e_c)
 {
-	t_philo **philosophers_db;
+	t_table	*table;
 
-	philosophers_db = init_philosophers(5);
-	if (!philosophers_db)
-		return (1);
+	table = malloc(sizeof(t_table));
+	if (!table)
+		return (NULL);
+	table->n_philo = n_p;
+	table->time_to_eat = t_e;
+	table->time_to_die = t_d;
+	table->time_to_sleep = t_s;
+	table->eat_count = e_c;
+	table->philo_db = init_philosophers(n_p);
+	if (!table->philo_db)
+		return (NULL);
+	return (table);
+}
+
+int	main(int argc, char	*argv[])
+{
+	construct_table();
 }
