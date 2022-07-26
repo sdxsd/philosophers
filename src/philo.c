@@ -43,7 +43,6 @@ A program is free software if users have all of these freedoms.
 #include "../include/philosophers.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 
 void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 {
@@ -114,34 +113,4 @@ t_philo	**init_philosophers(int n_philos)
 	initial_philo->l_philo = philo_1;
 	initial_philo->l_fork = philo_1->r_fork;
 	return (philosophers_db);
-}
-
-void	philo_sleep(t_philo *philo, t_table *t)
-{
-	philo->state = sleeping;
-	print_state(exact_time(), philo->index, philo->state, t);
-	usleep(t->time_to_sleep);
-	philo->state = thinking;
-}
-
-void	philo_eat(t_philo *philo, t_table *t)
-{
-	pthread_mutex_lock(philo->l_fork);
-	pthread_mutex_lock(philo->r_fork);
-	philo->state = eating;
-	philo->hunger = exact_time();
-	print_state(exact_time(), philo->index, philo->state, t);
-	usleep(t->time_to_eat);
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->r_fork);
-}
-
-/* >be philosopher */
-void	be_philosopher(t_philo *philo, t_table *table)
-{
-	if (philo->index % 2)
-		usleep(1024);
-	print_state(exact_time(), philo->index, philo->state, table);
-	philo_eat(philo, table);
-	philo_sleep(philo, table);
 }

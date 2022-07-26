@@ -38,22 +38,46 @@ A program is free software if users have all of these freedoms.
 */
 
 #include "../include/philosophers.h"
-#include <sys/time.h>
+#include <unistd.h>
 
-size_t	sec_to_mil(int seconds)
+void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 {
-	return (seconds / 1000);
+	pthread_mutex_lock(t->prnt_lck);
+	if (state == sleeping)
+		printf("%ld %ld is sleeping", milsec, index);
+	else if (state == eating)
+		printf("%ld %ld is eating", milsec, index);
+	else
+		printf("%ld %ld is thinking", milsec, index);
+	pthread_mutex_unlock(t->prnt_lck);
 }
 
-size_t	mic_to_mil(int mic_seconds)
+void	philo_sleep(t_philo *philo, t_table *t)
 {
-	return (mic_seconds * 1000);
+	philo->state = sleeping;
+	print_state(exact_time(), philo->index, philo->state, t);
+	usleep(t->time_to_sleep);
+	philo->state = thinking;
 }
 
-size_t exact_time(void)
+void	philo_eat(t_philo *philo, t_table *t)
 {
-	struct timeval	time;
+	pthread_mutex_lock(philo->l_fork);
+	pthread_mutex_lock(philo->r_fork);
+	philo->state = eating;
+	philo->hunger = exact_time();
+	print_state(exact_time(), philo->index, philo->state, t);
+	usleep(t->time_to_eat);
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+}
 
-	gettimeofday(&time, NULL);
-	return (sec_to_mil(time.tv_sec) + mic_to_mil(time.tv_usec));
+/* >be philosopher */
+void	be_philosopher(t_philo *philo, t_table *table)
+{
+	if (philo->index % 2)
+		usleep(1024);
+	print_state(exact_time(), philo->index, philo->state, table);
+	philo_eat(philo, table);
+	philo_sleep(philo, table);
 }
