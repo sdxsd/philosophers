@@ -109,7 +109,13 @@ t_philo	**init_philosophers(int n_philos)
 		philosophers_db[iter] = philo_1;
 		iter++;
 	}
+	initial_philo->l_philo = philo_1;
+	initial_philo->l_fork = philo_1->r_fork;
 	return (philosophers_db);
 }
 
 /* >be philosopher */
+void	be_philosopher(t_philo	*philo)
+{
+
+}
