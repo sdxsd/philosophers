@@ -73,6 +73,9 @@ typedef struct	s_table {
 	bool			death;
 } t_table;
 
+/* THREAD FUNCTIONS */
+int	init_threads(int n_philo, t_philo **p_db, t_table *t);
+
 /* PHILOSOPHER FUNCTIONS */
 t_philo	**init_philosophers(int n_philos);
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);

@@ -61,7 +61,10 @@ t_table	*construct_table(int args, char **argv)
 
 int	main(int argc, char	*argv[])
 {
+	t_table	*table;
+
 	if (argc > 6 || argc < 5)
 		return (0);
-	construct_table(argc - 1, argv + 1);
+	table = construct_table(argc - 1, argv + 1);
+	init_threads(table->n_philo, table->philo_db, table);
 }

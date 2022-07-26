@@ -79,11 +79,15 @@ void	*be_philosopher(void *p)
 	t_philo	*philo;
 	t_table	*table;
 
-	philo = (t_philo *)p;
-	table = (t_table *)philo->table;
-	print_state(exact_time(), philo->index, philo->state, table);
-	if (philo->index % 2)
-		usleep(1024);
-	philo_eat(philo, table);
-	philo_sleep(philo, table);
+	while (TRUE)
+	{
+		philo = (t_philo *)p;
+		table = (t_table *)philo->table;
+		print_state(exact_time(), philo->index, philo->state, table);
+		if (philo->index % 2)
+			usleep(1024);
+		philo_eat(philo, table);
+		philo_sleep(philo, table);
+	}
+	return (NULL);
 }
