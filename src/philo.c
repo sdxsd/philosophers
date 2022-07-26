@@ -116,11 +116,24 @@ t_philo	**init_philosophers(int n_philos)
 	return (philosophers_db);
 }
 
-void	eat(t_philo	*philo)
+void	philo_sleep(t_philo *philo, t_table *t)
 {
+	philo->state = sleeping;
+	print_state(exact_time(), philo->index, philo->state, t);
+	usleep(t->time_to_sleep);
+	philo->state = thinking;
+}
+
+void	philo_eat(t_philo *philo, t_table *t)
+{
+	pthread_mutex_lock(philo->l_fork);
+	pthread_mutex_lock(philo->r_fork);
+	philo->state = eating;
+	philo->hunger = exact_time();
+	print_state(exact_time(), philo->index, philo->state, t);
+	usleep(t->time_to_eat);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
-
 }
 
 /* >be philosopher */
@@ -129,4 +142,6 @@ void	be_philosopher(t_philo *philo, t_table *table)
 	if (philo->index % 2)
 		usleep(1024);
 	print_state(exact_time(), philo->index, philo->state, table);
+	philo_eat(philo, table);
+	philo_sleep(philo, table);
 }

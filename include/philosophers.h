@@ -46,6 +46,7 @@ A program is free software if users have all of these freedoms.
 
 enum e_states {
 	eating,
+	thinking,
 	sleeping,
 };
 
@@ -62,7 +63,10 @@ typedef struct s_philo {
 typedef struct	s_table {
 	pthread_mutex_t	*prnt_lck;
 	t_philo			**philo_db;
-	int				philo_count;
+	size_t			philo_count;
+	size_t			time_to_die;
+	size_t			time_to_sleep;
+	size_t			time_to_eat;
 } t_table;
 
 /* PHILOSOPHER FUNCTIONS */
