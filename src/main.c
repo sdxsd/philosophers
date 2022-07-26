@@ -53,7 +53,7 @@ t_table	*construct_table(int args, char **argv)
 	table->time_to_sleep = ft_atoi(argv[3]);
 	if (args > 4)
 		table->eat_count = ft_atoi(argv[4]);
-	table->philo_db = init_philosophers(n_p);
+	table->philo_db = init_philosophers(table->n_philo);
 	if (!table->philo_db)
 		return (NULL);
 	return (table);

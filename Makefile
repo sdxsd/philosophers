@@ -9,6 +9,10 @@ CFLAGS = -g -Wall -Wextra -Werror
 NAME = philosophers
 CFILES = \
 		src/main.c \
+		src/brain.c \
+		src/threads.c \
+		src/time.c \
+		src/utils.c \
 		src/philo.c
 OFILES = $(CFILES:.c=.o)
 

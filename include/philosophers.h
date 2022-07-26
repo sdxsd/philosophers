@@ -59,6 +59,7 @@ typedef struct s_philo {
 	struct s_philo	*r_philo;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
+	void			*table;
 } t_philo;
 
 typedef struct	s_table {
@@ -76,10 +77,14 @@ typedef struct	s_table {
 t_philo	**init_philosophers(int n_philos);
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);
 void	print_state(size_t milsec, size_t state, size_t index, t_table *t);
+void	*be_philosopher(void *p);
 
 /* TIME FUNCTIONS */
 size_t	exact_time(void);
 size_t	sec_to_mil(int seconds);
 size_t	mic_to_mil(int mic_seconds);
+
+/* UTILITY FUNCTIONS */
+int	ft_atoi(const char *str);
 
 # endif // PHILOSOPHERS_H

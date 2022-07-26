@@ -74,8 +74,13 @@ void	philo_eat(t_philo *philo, t_table *t)
 }
 
 /* >be philosopher */
-void	be_philosopher(t_philo *philo, t_table *table)
+void	*be_philosopher(void *p)
 {
+	t_philo	*philo;
+	t_table	*table;
+
+	philo = (t_philo *)p;
+	table = (t_table *)philo->table;
 	print_state(exact_time(), philo->index, philo->state, table);
 	if (philo->index % 2)
 		usleep(1024);

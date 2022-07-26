@@ -38,8 +38,20 @@ A program is free software if users have all of these freedoms.
 */
 
 #include "../include/philosophers.h"
+#include <stdlib.h>
 
-int	init_threads(int n_philo, t_philo **philosopher_db, t_table *t)
+int	init_threads(int n_philo, t_philo **p_db, t_table *t)
 {
+	int			iter;
+	pthread_t	**threads;
 
+	iter = 0;
+	threads = malloc(sizeof(pthread_t) * n_philo);
+	while (iter < n_philo)
+	{
+		p_db[iter]->table = (void *)t;
+		pthread_create(threads[iter], NULL,\
+					   (*be_philosopher)(p_db[iter]), p_db[iter]);
+		iter++;
+	}
 }
