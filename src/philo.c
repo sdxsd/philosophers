@@ -46,6 +46,8 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	int		ret;
 
 	new_philo = malloc(sizeof(t_philo));
+	if (!new_philo)
+		return (NULL);
 	new_philo->state = sleeping;
 	new_philo->index = index;
 	new_philo->l_philo = l_philo;
@@ -57,4 +59,38 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	ret = pthread_mutex_init(new_philo->r_fork, NULL);
 	if (ret > 0)
 		return (NULL);
+	return (new_philo);
+}
+
+t_philo	**init_philosophers(int n_philos)
+{
+	t_philo	**philosophers_db;
+	t_philo	*initial_philo;
+	t_philo	*philo_1;
+	t_philo	*philo_2;
+	int		iter;
+
+	philosophers_db = malloc(sizeof(t_philo *) * n_philos);
+	if (!philosophers_db)
+		return (NULL);
+	initial_philo = init_philosopher(NULL, NULL, 1);
+	if (!initial_philo)
+		return (NULL);
+	philo_1 = initial_philo;
+	philosophers_db[0] = initial_philo;
+	iter = 0;
+	while (iter < n_philos)
+	{
+		philo_2 = init_philosopher(philo_1, NULL, iter + 2);
+		if (!philo_2)
+			return (NULL);
+		else
+		{
+			philo_1->r_philo = philo_2;
+		}
+		philo_1 = philo_2;
+		philosophers_db[iter + 1] = philo_1;
+		iter++;
+	}
+	return (philosophers_db);
 }
