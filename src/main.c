@@ -43,6 +43,7 @@ A program is free software if users have all of these freedoms.
 t_table	*construct_table(int args, char **argv)
 {
 	t_table	*table;
+	int 	ret;
 
 	table = malloc(sizeof(t_table));
 	if (!table)
@@ -55,6 +56,10 @@ t_table	*construct_table(int args, char **argv)
 		table->eat_count = ft_atoi(argv[4]);
 	table->philo_db = init_philosophers(table->n_philo);
 	if (!table->philo_db)
+		return (NULL);
+	table->prnt_lck = malloc(sizeof(pthread_mutex_t));
+	ret = pthread_mutex_init(table->prnt_lck, NULL);
+	if (ret > 0)
 		return (NULL);
 	return (table);
 }

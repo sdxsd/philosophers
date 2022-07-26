@@ -45,11 +45,11 @@ void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 {
 	pthread_mutex_lock(t->prnt_lck);
 	if (state == sleeping)
-		printf("%ld %ld is sleeping", milsec, index);
+		printf("%ld %ld is sleeping\n", milsec, index);
 	else if (state == eating)
-		printf("%ld %ld is eating", milsec, index);
+		printf("%ld %ld is eating\n", milsec, index);
 	else
-		printf("%ld %ld is thinking", milsec, index);
+		printf("%ld %ld is thinking\n", milsec, index);
 	pthread_mutex_unlock(t->prnt_lck);
 }
 
@@ -59,6 +59,7 @@ void	philo_sleep(t_philo *philo, t_table *t)
 	print_state(exact_time(), philo->index, philo->state, t);
 	usleep(t->time_to_sleep);
 	philo->state = thinking;
+	print_state(exact_time(), philo->index, philo->state, t);
 }
 
 void	philo_eat(t_philo *philo, t_table *t)
@@ -71,6 +72,8 @@ void	philo_eat(t_philo *philo, t_table *t)
 	usleep(t->time_to_eat);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
+	philo->state = thinking;
+	print_state(exact_time(), philo->index, philo->state, t);
 }
 
 /* >be philosopher */
@@ -79,13 +82,12 @@ void	*be_philosopher(void *p)
 	t_philo	*philo;
 	t_table	*table;
 
+	philo = (t_philo *)p;
+	table = (t_table *)philo->table;
+	if (philo->index % 2)
+		usleep(1024);
 	while (TRUE)
 	{
-		philo = (t_philo *)p;
-		table = (t_table *)philo->table;
-		print_state(exact_time(), philo->index, philo->state, table);
-		if (philo->index % 2)
-			usleep(1024);
 		philo_eat(philo, table);
 		philo_sleep(philo, table);
 	}
