@@ -4,7 +4,7 @@
 # @file
 # @version 0.1
 
-CC = clang
+CC = gcc
 CFLAGS = -g -Wall -Wextra -Werror -pthread
 NAME = philosophers
 CFILES = \

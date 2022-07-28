@@ -56,10 +56,10 @@ void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 void	philo_sleep(t_philo *philo, t_table *t)
 {
 	philo->state = sleeping;
-	print_state(exact_time(), philo->index, philo->state, t);
+	print_state(exact_time(), philo->state, philo->index, t);
 	usleep(t->time_to_sleep);
 	philo->state = thinking;
-	print_state(exact_time(), philo->index, philo->state, t);
+	print_state(exact_time(), philo->state, philo->index, t);
 }
 
 void	philo_eat(t_philo *philo, t_table *t)
@@ -68,12 +68,11 @@ void	philo_eat(t_philo *philo, t_table *t)
 	pthread_mutex_lock(philo->r_fork);
 	philo->state = eating;
 	philo->hunger = exact_time();
-	print_state(exact_time(), philo->index, philo->state, t);
-	usleep(t->time_to_eat);
+	print_state(exact_time(), philo->state, philo->index, t);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
 	philo->state = thinking;
-	print_state(exact_time(), philo->index, philo->state, t);
+	print_state(exact_time(), philo->state, philo->index, t);
 }
 
 /* >be philosopher */
@@ -84,9 +83,8 @@ void	*be_philosopher(void *p)
 
 	philo = (t_philo *)p;
 	table = (t_table *)philo->table;
-	printf("NEW THREAD: %ld\n", philo->index);
 	if (philo->index % 2)
-		usleep(1024);
+		usleep(2048);
 	while (TRUE)
 	{
 		philo_eat(philo, table);

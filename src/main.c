@@ -72,4 +72,6 @@ int	main(int argc, char	*argv[])
 		return (0);
 	table = construct_table(argc - 1, argv + 1);
 	init_threads(table->n_philo, table->philo_db, table);
+	while (true)
+		;
 }

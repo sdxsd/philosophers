@@ -47,13 +47,15 @@ int	init_threads(int n_philo, t_philo **p_db, t_table *t)
 	pthread_t	**threads;
 
 	iter = 0;
-	threads = malloc(sizeof(pthread_t) * n_philo);
+	threads = malloc(sizeof(pthread_t *) * n_philo);
+	while (iter < n_philo)
+		threads[iter++] = malloc(sizeof(pthread_t));
+	iter = 0;
 	while (iter < n_philo)
 	{
 		p_db[iter]->table = (void *)t;
-		if (pthread_create(threads[iter], NULL,\
-					   (&be_philosopher)(p_db[iter]), &p_db[iter]) > 0)
-			perror("ERORR:");
+		pthread_create(threads[iter], NULL,\
+					   be_philosopher, p_db[iter]);
 		iter++;
 	}
 	return (FALSE);
