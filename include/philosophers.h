@@ -71,6 +71,7 @@ typedef struct s_table {
 	size_t			time_to_sleep;
 	size_t			time_to_eat;
 	size_t			eat_count;
+	size_t			epoch;
 	bool			death;
 }	t_table;
 
@@ -87,6 +88,11 @@ void	*be_philosopher(void *p);
 size_t	exact_time(void);
 size_t	sec_to_mil(int seconds);
 size_t	mic_to_mil(int mic_seconds);
+
+/* DEALLOCATION FUNCTIONS */
+void	free_threads(pthread_t **threads, int n_philo);
+void	free_philosophers(t_philo **p_db, int n_philo);
+void	free_table(t_table *t);
 
 /* UTILITY FUNCTIONS */
 int		ft_atoi(const char *str);
