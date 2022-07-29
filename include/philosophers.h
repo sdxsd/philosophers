@@ -60,10 +60,11 @@ typedef struct s_philo {
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 	void			*table;
-} t_philo;
+}	t_philo;
 
-typedef struct	s_table {
+typedef struct s_table {
 	pthread_mutex_t	*prnt_lck;
+	pthread_t		**threads;
 	t_philo			**philo_db;
 	size_t			n_philo;
 	size_t			time_to_die;
@@ -71,10 +72,10 @@ typedef struct	s_table {
 	size_t			time_to_eat;
 	size_t			eat_count;
 	bool			death;
-} t_table;
+}	t_table;
 
 /* THREAD FUNCTIONS */
-int	init_threads(int n_philo, t_philo **p_db, t_table *t);
+int		init_threads(int n_philo, t_philo **p_db, t_table *t);
 
 /* PHILOSOPHER FUNCTIONS */
 t_philo	**init_philosophers(int n_philos);
@@ -88,6 +89,6 @@ size_t	sec_to_mil(int seconds);
 size_t	mic_to_mil(int mic_seconds);
 
 /* UTILITY FUNCTIONS */
-int	ft_atoi(const char *str);
+int		ft_atoi(const char *str);
 
-# endif // PHILOSOPHERS_H
+#endif // PHILOSOPHERS_H

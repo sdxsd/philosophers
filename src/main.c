@@ -43,7 +43,7 @@ A program is free software if users have all of these freedoms.
 t_table	*construct_table(int args, char **argv)
 {
 	t_table	*table;
-	int 	ret;
+	int		ret;
 
 	table = malloc(sizeof(t_table));
 	if (!table)

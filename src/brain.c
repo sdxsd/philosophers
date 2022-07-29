@@ -53,13 +53,18 @@ void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 	pthread_mutex_unlock(t->prnt_lck);
 }
 
+void	philo_think(t_philo *philo, t_table *t)
+{
+	philo->state = thinking;
+	print_state(exact_time(), philo->state, philo->index, t);
+	usleep(t->time_to_sleep + t->time_to_eat / 2);
+}
+
 void	philo_sleep(t_philo *philo, t_table *t)
 {
 	philo->state = sleeping;
 	print_state(exact_time(), philo->state, philo->index, t);
 	usleep(t->time_to_sleep);
-	philo->state = thinking;
-	print_state(exact_time(), philo->state, philo->index, t);
 }
 
 void	philo_eat(t_philo *philo, t_table *t)
@@ -69,10 +74,9 @@ void	philo_eat(t_philo *philo, t_table *t)
 	philo->state = eating;
 	philo->hunger = exact_time();
 	print_state(exact_time(), philo->state, philo->index, t);
+	usleep(t->time_to_eat);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
-	philo->state = thinking;
-	print_state(exact_time(), philo->state, philo->index, t);
 }
 
 /* >be philosopher */
@@ -84,11 +88,12 @@ void	*be_philosopher(void *p)
 	philo = (t_philo *)p;
 	table = (t_table *)philo->table;
 	if (philo->index % 2)
-		usleep(2048);
+		usleep(128);
 	while (TRUE)
 	{
 		philo_eat(philo, table);
 		philo_sleep(philo, table);
+		philo_think(philo, table);
 	}
 	return (NULL);
 }
