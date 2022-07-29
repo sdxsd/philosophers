@@ -39,26 +39,40 @@ A program is free software if users have all of these freedoms.
 
 #include "../include/philosophers.h"
 #include <stdlib.h>
-#include <stdio.h>
 
-int	init_threads(int n_philo, t_philo **p_db, t_table *t)
+void	free_threads(pthread_t **threads, int n_philo)
 {
-	int			iter;
-	int			ret;
+	int	iter;
 
-	iter = 0;
-	t->threads = malloc(sizeof(pthread_t *) * n_philo);
-	while (iter < n_philo)
-		t->threads[iter++] = malloc(sizeof(pthread_t));
 	iter = 0;
 	while (iter < n_philo)
 	{
-		p_db[iter]->table = (void *)t;
-		ret = pthread_create(t->threads[iter], NULL, \
-							be_philosopher, p_db[iter]);
-		if (ret > 0)
-
+		free(threads[iter]);
 		iter++;
 	}
-	return (TRUE);
+	free(threads);
+}
+
+void	free_philosophers(t_philo **p_db, int n_philo)
+{
+	int	iter;
+
+	iter = 0;
+	while (iter < n_philo)
+	{
+		pthread_mutex_destroy(p_db[iter]->l_fork);
+		free(p_db[iter]->l_fork);
+		free(p_db[iter]);
+		iter++;
+	}
+	free(p_db);
+}
+
+void	free_table(t_table *t)
+{
+	free_philosophers(t->philo_db, t->n_philo);
+	free_threads(t->threads, t->n_philo);
+	pthread_mutex_destroy(t->prnt_lck);
+	free(t->prnt_lck);
+	free(t);
 }
