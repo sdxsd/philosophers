@@ -70,8 +70,8 @@ int	main(int argc, char	*argv[])
 
 	if (argc > 6 || argc < 5)
 		return (0);
+	if (!chk_args(argv + 1))
+		return (0);
 	table = construct_table(argc - 1, argv + 1);
 	init_threads(table->n_philo, table->philo_db, table);
-	while (true)
-		;
 }

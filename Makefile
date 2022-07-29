@@ -13,6 +13,8 @@ CFILES = \
 		src/threads.c \
 		src/time.c \
 		src/utils.c \
+		src/parse.c \
+		src/free.c \
 		src/philo.c
 OFILES = $(CFILES:.c=.o)
 

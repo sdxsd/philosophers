@@ -41,16 +41,19 @@ A program is free software if users have all of these freedoms.
 
 int	chk_string(char *string)
 {
-	while (*string++)
+	while (*string != '\0')
+	{
 		if (!(*string >= '0' && *string <= '9'))
 			return (FALSE);
+		string++;
+	}
 	return (TRUE);
 }
 
 int	chk_args(char **args)
 {
-	while(*args++)
-		if (!chk_string(*args))
+	while(*(args))
+		if (!chk_string(*args++))
 			return (FALSE);
 	return (TRUE);
 }
