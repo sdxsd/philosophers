@@ -46,3 +46,11 @@ int	chk_string(char *string)
 			return (FALSE);
 	return (TRUE);
 }
+
+int	chk_args(char **args)
+{
+	while(*args++)
+		if (!chk_string(*args))
+			return (FALSE);
+	return (TRUE);
+}

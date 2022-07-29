@@ -96,5 +96,7 @@ void	free_table(t_table *t);
 
 /* UTILITY FUNCTIONS */
 int		ft_atoi(const char *str);
+int		chk_string(char *string);
+int		chk_args(char **args);
 
 #endif // PHILOSOPHERS_H
