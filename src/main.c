@@ -61,6 +61,7 @@ t_table	*construct_table(int args, char **argv)
 	ret = pthread_mutex_init(table->prnt_lck, NULL);
 	if (ret > 0)
 		return (NULL);
+	table->epoch = exact_time();
 	return (table);
 }
 

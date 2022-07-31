@@ -88,6 +88,8 @@ void	*be_philosopher(void *p);
 size_t	exact_time(void);
 size_t	sec_to_mil(int seconds);
 size_t	mic_to_mil(int mic_seconds);
+size_t	time_since(int epoch, int current);
+void	i_sleep(int milsecs, t_philo *p, t_table *t);
 
 /* DEALLOCATION FUNCTIONS */
 void	free_threads(pthread_t **threads, int n_philo);

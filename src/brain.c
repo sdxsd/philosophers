@@ -56,14 +56,14 @@ void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 void	philo_think(t_philo *philo, t_table *t)
 {
 	philo->state = thinking;
-	print_state(exact_time(), philo->state, philo->index, t);
+	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
 	usleep(t->time_to_sleep + t->time_to_eat / 2);
 }
 
 void	philo_sleep(t_philo *philo, t_table *t)
 {
 	philo->state = sleeping;
-	print_state(exact_time(), philo->state, philo->index, t);
+	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
 	usleep(t->time_to_sleep);
 }
 
@@ -73,7 +73,7 @@ void	philo_eat(t_philo *philo, t_table *t)
 	pthread_mutex_lock(philo->r_fork);
 	philo->state = eating;
 	philo->hunger = exact_time();
-	print_state(exact_time(), philo->state, philo->index, t);
+	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
 	usleep(t->time_to_eat);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);

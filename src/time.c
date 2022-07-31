@@ -59,6 +59,11 @@ size_t	exact_time(void)
 	return (sec_to_mil(time.tv_sec) + mic_to_mil(time.tv_usec));
 }
 
+size_t	time_since(int epoch, int current)
+{
+	return ((current - epoch) * -1);
+}
+
 void	i_sleep(int milsecs, t_philo *p, t_table *t)
 {
 	int iter;
