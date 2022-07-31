@@ -39,6 +39,7 @@ A program is free software if users have all of these freedoms.
 
 #include "../include/philosophers.h"
 #include <sys/time.h>
+#include <unistd.h>
 
 size_t	sec_to_mil(int seconds)
 {
@@ -56,4 +57,16 @@ size_t	exact_time(void)
 
 	gettimeofday(&time, NULL);
 	return (sec_to_mil(time.tv_sec) + mic_to_mil(time.tv_usec));
+}
+
+void	i_sleep(int milsecs, t_philo *p, t_table *t)
+{
+	int iter;
+
+	iter = 0;
+	while (iter < milsecs)
+	{
+		usleep(milsecs / 10);
+		iter += milsecs / 10;
+	}
 }
