@@ -57,14 +57,14 @@ void	philo_think(t_philo *philo, t_table *t)
 {
 	philo->state = thinking;
 	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
-	usleep(t->time_to_sleep + t->time_to_eat / 2);
+	i_sleep(t->time_to_sleep + t->time_to_eat / 2);
 }
 
 void	philo_sleep(t_philo *philo, t_table *t)
 {
 	philo->state = sleeping;
 	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
-	usleep(t->time_to_sleep);
+	i_sleep(t->time_to_sleep);
 }
 
 void	philo_eat(t_philo *philo, t_table *t)
@@ -74,7 +74,8 @@ void	philo_eat(t_philo *philo, t_table *t)
 	philo->state = eating;
 	philo->hunger = exact_time();
 	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
-	usleep(t->time_to_eat);
+	i_sleep(t->time_to_eat);
+	philo->eat_cnt++;
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
 }
