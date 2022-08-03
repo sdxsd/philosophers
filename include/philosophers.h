@@ -86,8 +86,8 @@ void	*be_philosopher(void *p);
 
 /* TIME FUNCTIONS */
 size_t	exact_time(void);
-size_t	sec_to_mil(int seconds);
-size_t	mic_to_mil(int mic_seconds);
+size_t	sec_to_mil(size_t seconds);
+size_t	mic_to_mil(size_t mic_seconds);
 size_t	time_since(size_t epoch, size_t current);
 void	i_sleep(int milsecs);
 

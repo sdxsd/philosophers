@@ -54,10 +54,11 @@ int	init_threads(int n_philo, t_philo **p_db, t_table *t)
 	while (iter < n_philo)
 	{
 		p_db[iter]->table = (void *)t;
+		p_db[iter]->hunger = t->epoch;
 		ret = pthread_create(t->threads[iter], NULL, \
 							be_philosopher, p_db[iter]);
 		if (ret > 0)
-
+			return (FALSE);
 		iter++;
 	}
 	return (TRUE);

@@ -39,6 +39,8 @@ A program is free software if users have all of these freedoms.
 
 #include "../include/philosophers.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 
 t_table	*construct_table(int args, char **argv)
 {
@@ -62,6 +64,7 @@ t_table	*construct_table(int args, char **argv)
 	if (ret > 0)
 		return (NULL);
 	table->epoch = exact_time();
+	table->death = FALSE;
 	return (table);
 }
 
@@ -75,4 +78,5 @@ int	main(int argc, char	*argv[])
 		return (0);
 	table = construct_table(argc - 1, argv + 1);
 	init_threads(table->n_philo, table->philo_db, table);
+	while (TRUE);
 }

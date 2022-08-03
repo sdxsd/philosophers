@@ -80,6 +80,16 @@ void	philo_eat(t_philo *philo, t_table *t)
 	pthread_mutex_unlock(philo->r_fork);
 }
 
+void	check_death(t_philo *p, t_table *t)
+{
+	if (time_since(p->hunger, exact_time()) > t->time_to_die)
+	{
+		pthread_mutex_lock(t->prnt_lck);
+		printf("%ld %ld died\n", time_since(t->epoch, exact_time()), p->index);
+		t->death = TRUE;
+	}
+}
+
 /* >be philosopher */
 void	*be_philosopher(void *p)
 {
@@ -93,8 +103,11 @@ void	*be_philosopher(void *p)
 	while (TRUE)
 	{
 		philo_eat(philo, table);
+		check_death(philo, table);
 		philo_sleep(philo, table);
+		check_death(philo, table);
 		philo_think(philo, table);
+		check_death(philo, table);
 	}
 	return (NULL);
 }
