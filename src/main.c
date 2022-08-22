@@ -98,7 +98,8 @@ int	main(int argc, char	*argv[])
 	table = construct_table(argc - 1, argv + 1);
 	if (!table)
 		return (-1);
-	init_threads(table->n_philo, table->philo_db, table);
+	if (!init_threads(table->n_philo, table->philo_db, table))
+		return (-1);
 	big_brother(table);
 	while (TRUE);
 }

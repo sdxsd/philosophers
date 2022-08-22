@@ -58,7 +58,10 @@ int	init_threads(int n_philo, t_philo **p_db, t_table *t)
 		ret = pthread_create(t->threads[iter], NULL, \
 							be_philosopher, p_db[iter]);
 		if (ret > 0)
+		{
+			free_threads(t->threads, iter);
 			return (FALSE);
+		}
 		iter++;
 	}
 	return (TRUE);
