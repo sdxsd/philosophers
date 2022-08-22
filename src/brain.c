@@ -55,6 +55,8 @@ void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 
 void	philo_think(t_philo *philo, t_table *t)
 {
+	if (t->gedood)
+		pthread_exit(NULL);
 	philo->state = thinking;
 	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
 	i_sleep(t->time_to_sleep + t->time_to_eat / 2);
@@ -62,6 +64,8 @@ void	philo_think(t_philo *philo, t_table *t)
 
 void	philo_sleep(t_philo *philo, t_table *t)
 {
+	if (t->gedood)
+		pthread_exit(NULL);
 	philo->state = sleeping;
 	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
 	i_sleep(t->time_to_sleep);
@@ -69,6 +73,8 @@ void	philo_sleep(t_philo *philo, t_table *t)
 
 void	philo_eat(t_philo *philo, t_table *t)
 {
+	if (t->gedood)
+		pthread_exit(NULL);
 	pthread_mutex_lock(philo->l_fork);
 	pthread_mutex_lock(philo->r_fork);
 	philo->state = eating;
@@ -87,6 +93,7 @@ void	check_death(t_philo *p, t_table *t)
 		pthread_mutex_lock(t->prnt_lck);
 		printf("%ld %ld died\n", time_since(t->epoch, exact_time()), p->index);
 		p->death = TRUE;
+		pthread_exit(NULL);
 	}
 }
 
