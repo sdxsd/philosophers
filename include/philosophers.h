@@ -60,6 +60,7 @@ typedef struct s_philo {
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 	void			*table;
+	bool			death;
 }	t_philo;
 
 typedef struct s_table {
@@ -72,7 +73,7 @@ typedef struct s_table {
 	size_t			time_to_eat;
 	size_t			eat_count;
 	size_t			epoch;
-	bool			death;
+	bool			gedood;
 }	t_table;
 
 /* THREAD FUNCTIONS */

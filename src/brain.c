@@ -86,7 +86,7 @@ void	check_death(t_philo *p, t_table *t)
 	{
 		pthread_mutex_lock(t->prnt_lck);
 		printf("%ld %ld died\n", time_since(t->epoch, exact_time()), p->index);
-		t->death = TRUE;
+		p->death = TRUE;
 	}
 }
 

@@ -64,8 +64,27 @@ t_table	*construct_table(int args, char **argv)
 	if (ret > 0)
 		return (NULL);
 	table->epoch = exact_time();
-	table->death = FALSE;
+	table->gedood = FALSE;
 	return (table);
+}
+
+/* The party is always watching  */
+void	big_brother(t_table *table)
+{
+	t_philo *nietszche;
+
+	nietszche = table->philo_db[0];
+	while (nietszche->r_philo)
+	{
+		if (nietszche->death)
+		{
+			table->gedood = TRUE;
+			break ;
+		}
+		nietszche = nietszche->r_philo;
+	}
+	usleep(2048);
+	free_table(table);
 }
 
 int	main(int argc, char	*argv[])
@@ -77,6 +96,9 @@ int	main(int argc, char	*argv[])
 	if (!chk_args(argv + 1))
 		return (0);
 	table = construct_table(argc - 1, argv + 1);
+	if (!table)
+		return (-1);
 	init_threads(table->n_philo, table->philo_db, table);
+	big_brother(table);
 	while (TRUE);
 }
