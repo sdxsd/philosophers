@@ -71,7 +71,7 @@ t_table	*construct_table(int args, char **argv)
 /* The party is always watching  */
 void	big_brother(t_table *table)
 {
-	t_philo *nietszche;
+	t_philo	*nietszche;
 
 	nietszche = table->philo_db[0];
 	while (nietszche->r_philo)
@@ -83,7 +83,7 @@ void	big_brother(t_table *table)
 		}
 		nietszche = nietszche->r_philo;
 	}
-	usleep(2048);
+	usleep(5000);
 	free_table(table);
 }
 
@@ -101,5 +101,4 @@ int	main(int argc, char	*argv[])
 	if (!init_threads(table->n_philo, table->philo_db, table))
 		return (-1);
 	big_brother(table);
-	while (TRUE);
 }

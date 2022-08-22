@@ -58,8 +58,9 @@ void	philo_think(t_philo *philo, t_table *t)
 	if (t->gedood)
 		pthread_exit(NULL);
 	philo->state = thinking;
-	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
-	i_sleep(t->time_to_sleep + t->time_to_eat / 2);
+	print_state(time_since(t->epoch, exact_time()), \
+				philo->state, philo->index, t);
+	i_sleep(t->time_to_sleep + t->time_to_eat / 2, philo, t);
 }
 
 void	philo_sleep(t_philo *philo, t_table *t)
@@ -67,8 +68,9 @@ void	philo_sleep(t_philo *philo, t_table *t)
 	if (t->gedood)
 		pthread_exit(NULL);
 	philo->state = sleeping;
-	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
-	i_sleep(t->time_to_sleep);
+	print_state(time_since(t->epoch, exact_time()), \
+				philo->state, philo->index, t);
+	i_sleep(t->time_to_sleep, philo, t);
 }
 
 void	philo_eat(t_philo *philo, t_table *t)
@@ -79,8 +81,9 @@ void	philo_eat(t_philo *philo, t_table *t)
 	pthread_mutex_lock(philo->r_fork);
 	philo->state = eating;
 	philo->hunger = exact_time();
-	print_state(time_since(t->epoch, exact_time()), philo->state, philo->index, t);
-	i_sleep(t->time_to_eat);
+	print_state(time_since(t->epoch, exact_time()), \
+				philo->state, philo->index, t);
+	i_sleep(t->time_to_eat, philo, t);
 	philo->eat_cnt++;
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
@@ -88,6 +91,8 @@ void	philo_eat(t_philo *philo, t_table *t)
 
 void	check_death(t_philo *p, t_table *t)
 {
+	if (t->gedood)
+		pthread_exit(NULL);
 	if (time_since(p->hunger, exact_time()) > t->time_to_die)
 	{
 		pthread_mutex_lock(t->prnt_lck);
@@ -110,11 +115,8 @@ void	*be_philosopher(void *p)
 	while (TRUE)
 	{
 		philo_eat(philo, table);
-		check_death(philo, table);
 		philo_sleep(philo, table);
-		check_death(philo, table);
 		philo_think(philo, table);
-		check_death(philo, table);
 	}
 	return (NULL);
 }

@@ -52,7 +52,7 @@ int	chk_string(char *string)
 
 int	chk_args(char **args)
 {
-	while(*(args))
+	while (*(args))
 		if (!chk_string(*args++))
 			return (FALSE);
 	return (TRUE);

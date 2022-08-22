@@ -84,13 +84,14 @@ t_philo	**init_philosophers(int n_philos);
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);
 void	print_state(size_t milsec, size_t state, size_t index, t_table *t);
 void	*be_philosopher(void *p);
+void	check_death(t_philo *p, t_table *t);
 
 /* TIME FUNCTIONS */
 size_t	exact_time(void);
 size_t	sec_to_mil(size_t seconds);
 size_t	mic_to_mil(size_t mic_seconds);
 size_t	time_since(size_t epoch, size_t current);
-void	i_sleep(int milsecs);
+void	i_sleep(int milsecs, t_philo *p, t_table *t);
 
 /* DEALLOCATION FUNCTIONS */
 void	free_threads(pthread_t **threads, int n_philo);
