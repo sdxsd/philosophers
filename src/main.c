@@ -68,7 +68,20 @@ t_table	*construct_table(int args, char **argv)
 	return (table);
 }
 
-/* The party is always watching  */
+void	check_death(t_philo *p, t_table *t)
+{
+	if (t->gedood)
+		pthread_exit(NULL);
+	if (time_since(p->hunger, exact_time()) > t->time_to_die)
+	{
+		pthread_mutex_lock(t->prnt_lck);
+		printf("%ld %ld died\n", time_since(t->epoch, exact_time()), p->index);
+		p->death = TRUE;
+		pthread_exit(NULL);
+	}
+}
+
+/* Big brother is always watching  */
 void	big_brother(t_table *table)
 {
 	t_philo	*nietszche;

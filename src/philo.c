@@ -67,36 +67,39 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	return (new_philo);
 }
 
+t_philo	*populate_table(t_philo *p1, t_philo **db, int n)
+{
+	t_philo	*p2;
+	int		iter;
+
+	iter = 1;
+	while (iter < n)
+	{
+		p2 = init_philosopher(p1, NULL, iter + 1);
+		if (!p2)
+			return (NULL);
+		else
+			p1->r_philo = p2;
+		p1 = p2;
+		db[iter] = p1;
+		iter++;
+	}
+	return (p1);
+}
+
 t_philo	**init_philosophers(int n_philos)
 {
 	t_philo	**philosophers_db;
 	t_philo	*initial_philo;
 	t_philo	*philo_1;
-	t_philo	*philo_2;
-	int		iter;
 
 	philosophers_db = malloc(sizeof(t_philo *) * n_philos);
-	if (!philosophers_db)
-		return (NULL);
 	initial_philo = init_philosopher(NULL, NULL, 1);
-	if (!initial_philo)
+	if (!initial_philo || !philosophers_db)
 		return (NULL);
 	philo_1 = initial_philo;
 	philosophers_db[0] = initial_philo;
-	iter = 1;
-	while (iter < n_philos)
-	{
-		philo_2 = init_philosopher(philo_1, NULL, iter + 1);
-		if (!philo_2)
-			return (NULL);
-		else
-		{
-			philo_1->r_philo = philo_2;
-		}
-		philo_1 = philo_2;
-		philosophers_db[iter] = philo_1;
-		iter++;
-	}
+	philo_1 = populate_table(philo_1, philosophers_db, n_philos);
 	philo_1->r_philo = initial_philo;
 	initial_philo->l_philo = philo_1;
 	initial_philo->l_fork = philo_1->r_fork;
