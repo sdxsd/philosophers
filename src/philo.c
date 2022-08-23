@@ -56,9 +56,8 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	new_philo->l_philo = l_philo;
 	new_philo->r_philo = r_philo;
 	new_philo->death = FALSE;
-	if (index == 1)
-		;
-	else
+	new_philo->sated = FALSE;
+	if (index > 1)
 		new_philo->l_fork = l_philo->r_fork;
 	new_philo->r_fork = malloc(sizeof(pthread_mutex_t));
 	ret = pthread_mutex_init(new_philo->r_fork, NULL);

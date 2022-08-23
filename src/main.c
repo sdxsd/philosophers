@@ -72,6 +72,8 @@ void	check_death(t_philo *p, t_table *t)
 {
 	if (t->gedood)
 		pthread_exit(NULL);
+	if (p->eat_cnt >= t->eat_count)
+		p->sated = TRUE;
 	if (time_since(p->hunger, exact_time()) > t->time_to_die)
 	{
 		pthread_mutex_lock(t->prnt_lck);

@@ -61,6 +61,7 @@ typedef struct s_philo {
 	pthread_mutex_t	*r_fork;
 	void			*table;
 	bool			death;
+	bool			sated;
 }	t_philo;
 
 typedef struct s_table {
