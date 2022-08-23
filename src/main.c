@@ -56,6 +56,8 @@ t_table	*construct_table(int args, char **argv)
 	table->time_to_sleep = ft_atoi(argv[3]);
 	if (args > 4)
 		table->eat_count = ft_atoi(argv[4]);
+	else
+		table->eat_count = 0;
 	table->philo_db = init_philosophers(table->n_philo);
 	if (!table->philo_db)
 		return (NULL);
@@ -88,6 +90,8 @@ int	check_sated(t_table *table)
 	size_t	iter;
 
 	iter = 0;
+	if (table->eat_count == 0)
+		return (FALSE);
 	while (iter < table->n_philo)
 	{
 		if (table->philo_db[iter]->sated)
