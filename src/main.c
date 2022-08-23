@@ -87,16 +87,28 @@ void	check_death(t_philo *p, t_table *t)
 void	big_brother(t_table *table)
 {
 	t_philo	*nietszche;
+	size_t	n_sated;
+	size_t	iter;
 
 	nietszche = table->philo_db[0];
+	n_sated = 0;
+	iter = 0;
 	while (nietszche->r_philo)
 	{
-		if (nietszche->death)
+		if (iter > table->n_philo)
+		{
+			n_sated = 0;
+			iter = 0;
+		}
+		if (nietszche->sated)
+			n_sated++;
+		if (nietszche->death || n_sated == table->n_philo)
 		{
 			table->gedood = TRUE;
 			break ;
 		}
 		nietszche = nietszche->r_philo;
+		iter++;
 	}
 	usleep(5000);
 	free_table(table);
