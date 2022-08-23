@@ -55,6 +55,7 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	new_philo->index = index;
 	new_philo->l_philo = l_philo;
 	new_philo->r_philo = r_philo;
+	new_philo->death = FALSE;
 	if (index == 1)
 		;
 	else
