@@ -39,101 +39,32 @@ A program is free software if users have all of these freedoms.
 
 #include "../include/philosophers.h"
 #include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 
-t_table	*construct_table(int args, char **argv)
+t_philo	**lonely_philo(void)
 {
-	t_table	*table;
-	int		ret;
+	t_philo	*new_philo;
+	t_philo	**p_db;
 
-	table = malloc(sizeof(t_table));
-	if (!table)
+	new_philo = malloc(sizeof(t_philo));
+	p_db = malloc(sizeof(t_philo *));
+	if (!new_philo)
 		return (NULL);
-	table->n_philo = ft_atoi(argv[0]);
-	table->time_to_die = ft_atoi(argv[1]);
-	table->time_to_eat = ft_atoi(argv[2]);
-	table->time_to_sleep = ft_atoi(argv[3]);
-	if (args > 4)
-		table->eat_count = ft_atoi(argv[4]);
-	else
-		table->eat_count = 0;
-	table->philo_db = init_philosophers(table->n_philo);
-	if (!table->philo_db)
+	*p_db = new_philo;
+	new_philo->state = sleeping;
+	new_philo->index = 0;
+	new_philo->l_philo = NULL;
+	new_philo->r_philo = NULL;
+	new_philo->death = FALSE;
+	new_philo->sated = FALSE;
+	new_philo->r_fork = malloc(sizeof(pthread_mutex_t));
+	if (!new_philo->r_fork)
 		return (NULL);
-	table->prnt_lck = malloc(sizeof(pthread_mutex_t));
-	ret = pthread_mutex_init(table->prnt_lck, NULL);
-	if (ret > 0)
+	new_philo->l_fork = malloc(sizeof(pthread_mutex_t));
+	if (!new_philo->l_fork)
 		return (NULL);
-	table->gedood = FALSE;
-	return (table);
-}
-
-void	check_death(t_philo *p, t_table *t)
-{
-	if (t->gedood)
-		pthread_exit(NULL);
-	if (p->eat_cnt >= t->eat_count)
-		p->sated = TRUE;
-	if (time_since(p->hunger, exact_time()) > t->time_to_die)
-	{
-		pthread_mutex_lock(t->prnt_lck);
-		printf("%ld %ld died\n", time_since(t->epoch, exact_time()), p->index);
-		p->death = TRUE;
-		pthread_exit(NULL);
-	}
-}
-
-int	check_sated(t_table *table)
-{
-	size_t	iter;
-
-	iter = 0;
-	if (table->eat_count == 0)
-		return (FALSE);
-	while (iter < table->n_philo)
-	{
-		if (table->philo_db[iter]->sated)
-			;
-		else
-			return (FALSE);
-		iter++;
-	}
-	usleep(4096);
-	return (TRUE);
-}
-
-/* Big brother is always watching  */
-void	big_brother(t_table *table)
-{
-	t_philo	*nietszche;
-
-	nietszche = table->philo_db[0];
-	while (nietszche->r_philo)
-	{
-		if (nietszche->death || check_sated(table))
-		{
-			table->gedood = TRUE;
-			break ;
-		}
-		nietszche = nietszche->r_philo;
-	}
-	usleep(4096);
-	free_table(table);
-}
-
-int	main(int argc, char	*argv[])
-{
-	t_table	*table;
-
-	if (argc > 6 || argc < 5)
-		return (0);
-	if (!chk_args(argv + 1))
-		return (0);
-	table = construct_table(argc - 1, argv + 1);
-	if (!table)
-		return (-1);
-	if (!init_threads(table->n_philo, table->philo_db, table))
-		return (-1);
-	big_brother(table);
+	if (pthread_mutex_init(new_philo->r_fork, NULL) > 0)
+		return (NULL);
+	if (pthread_mutex_init(new_philo->l_fork, NULL) > 0)
+		return (NULL);
+	return (p_db);
 }

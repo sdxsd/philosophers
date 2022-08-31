@@ -6,7 +6,7 @@
 
 CC = clang
 CFLAGS = -g -Wall -Wextra -Werror -pthread
-NAME = philosophers
+NAME = philo
 CFILES = \
 		src/main.c \
 		src/brain.c \
@@ -15,6 +15,7 @@ CFILES = \
 		src/utils.c \
 		src/parse.c \
 		src/free.c \
+		src/lonely_philo.c \
 		src/philo.c
 OFILES = $(CFILES:.c=.o)
 

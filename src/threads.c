@@ -51,6 +51,7 @@ int	init_threads(int n_philo, t_philo **p_db, t_table *t)
 	while (iter < n_philo)
 		t->threads[iter++] = malloc(sizeof(pthread_t));
 	iter = 0;
+	t->epoch = exact_time();
 	while (iter < n_philo)
 	{
 		p_db[iter]->table = (void *)t;

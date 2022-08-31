@@ -60,7 +60,6 @@ void	philo_think(t_philo *philo, t_table *t)
 	philo->state = thinking;
 	print_state(time_since(t->epoch, exact_time()), \
 				philo->state, philo->index, t);
-	i_sleep(t->time_to_sleep + t->time_to_eat / 2, philo, t);
 }
 
 void	philo_sleep(t_philo *philo, t_table *t)

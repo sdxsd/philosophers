@@ -71,8 +71,8 @@ void	i_sleep(int milsecs, t_philo *p, t_table *t)
 	iter = 0;
 	while (iter < milsecs)
 	{
-		usleep((milsecs * 1000) / 10);
-		iter += milsecs / 10;
+		usleep((milsecs * 1000));
+		iter += milsecs;
 		check_death(p, t);
 	}
 }
