@@ -136,4 +136,5 @@ int	main(int argc, char	*argv[])
 	if (!init_threads(table->n_philo, table->philo_db, table))
 		return (-1);
 	big_brother(table);
+	return (0);
 }

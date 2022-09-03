@@ -92,6 +92,8 @@ t_philo	**init_philosophers(int n_philos)
 	t_philo	*initial_philo;
 	t_philo	*philo_1;
 
+	if (n_philos == 1)
+		return (lonely_philo());
 	philosophers_db = malloc(sizeof(t_philo *) * n_philos);
 	initial_philo = init_philosopher(NULL, NULL, 1);
 	if (!initial_philo || !philosophers_db)

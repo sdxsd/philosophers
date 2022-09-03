@@ -53,7 +53,7 @@ t_philo	**lonely_philo(void)
 	new_philo->state = sleeping;
 	new_philo->index = 0;
 	new_philo->l_philo = NULL;
-	new_philo->r_philo = NULL;
+	new_philo->r_philo = new_philo;
 	new_philo->death = FALSE;
 	new_philo->sated = FALSE;
 	new_philo->r_fork = malloc(sizeof(pthread_mutex_t));

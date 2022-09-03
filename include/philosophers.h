@@ -83,6 +83,7 @@ int		init_threads(int n_philo, t_philo **p_db, t_table *t);
 /* PHILOSOPHER FUNCTIONS */
 t_philo	**init_philosophers(int n_philos);
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);
+t_philo	**lonely_philo(void);
 void	print_state(size_t milsec, size_t state, size_t index, t_table *t);
 void	*be_philosopher(void *p);
 void	check_death(t_philo *p, t_table *t);
