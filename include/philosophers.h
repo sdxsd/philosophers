@@ -66,6 +66,7 @@ typedef struct s_philo {
 
 typedef struct s_table {
 	pthread_mutex_t	*prnt_lck;
+	pthread_mutex_t	*dood_mutex;
 	pthread_t		**threads;
 	t_philo			**philo_db;
 	size_t			n_philo;

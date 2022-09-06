@@ -62,7 +62,15 @@ t_table	*construct_table(int args, char **argv)
 	if (!table->philo_db)
 		return (NULL);
 	table->prnt_lck = malloc(sizeof(pthread_mutex_t));
+	if (!table->prnt_lck)
+		return (NULL);
+	table->dood_mutex = malloc(sizeof(pthread_mutex_t));
+	if (!table->dood_mutex)
+		return (NULL);
 	ret = pthread_mutex_init(table->prnt_lck, NULL);
+	if (ret > 0)
+		return (NULL);
+	ret = pthread_mutex_init(table->dood_mutex, NULL);
 	if (ret > 0)
 		return (NULL);
 	table->gedood = FALSE;
@@ -71,17 +79,22 @@ t_table	*construct_table(int args, char **argv)
 
 void	check_death(t_philo *p, t_table *t)
 {
-	if (t->gedood)
-		pthread_exit(NULL);
 	if (p->eat_cnt >= t->eat_count)
 		p->sated = TRUE;
-	if (time_since(p->hunger, exact_time()) > t->time_to_die)
+	pthread_mutex_lock(t->dood_mutex);
+	if (time_since(p->hunger, exact_time()) > t->time_to_die || t->gedood)
 	{
-		pthread_mutex_lock(t->prnt_lck);
+		if (p->state == eating)
+		{
+			pthread_mutex_unlock(p->l_fork);
+			pthread_mutex_unlock(p->r_fork);
+		}
 		printf("%ld %ld died\n", time_since(t->epoch, exact_time()), p->index);
 		p->death = TRUE;
+		pthread_mutex_unlock(t->dood_mutex);
 		pthread_exit(NULL);
 	}
+	pthread_mutex_unlock(t->dood_mutex);
 }
 
 int	check_sated(t_table *table)
@@ -113,7 +126,10 @@ void	big_brother(t_table *table)
 	{
 		if (nietszche->death || check_sated(table))
 		{
+			pthread_mutex_lock(table->prnt_lck);
+			pthread_mutex_lock(table->dood_mutex);
 			table->gedood = TRUE;
+			pthread_mutex_unlock(table->dood_mutex);
 			break ;
 		}
 		nietszche = nietszche->r_philo;
