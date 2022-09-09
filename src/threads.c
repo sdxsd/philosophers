@@ -41,26 +41,36 @@ A program is free software if users have all of these freedoms.
 #include <stdlib.h>
 #include <stdio.h>
 
+void	join_threads(int n_philo, pthread_t *thread_db)
+{
+	int	iter;
+
+	iter = 0;
+	while (iter < n_philo)
+	{
+		pthread_join(thread_db[iter], NULL);
+		iter++;
+	}
+}
+
 int	init_threads(int n_philo, t_philo **p_db, t_table *t)
 {
 	int			iter;
 	int			ret;
 
 	iter = 0;
-	t->threads = malloc(sizeof(pthread_t *) * n_philo);
-	while (iter < n_philo)
-		t->threads[iter++] = malloc(sizeof(pthread_t));
+	t->threads = malloc(sizeof(pthread_t) * n_philo);
 	iter = 0;
 	t->epoch = exact_time();
 	while (iter < n_philo)
 	{
 		p_db[iter]->table = (void *)t;
 		p_db[iter]->hunger = t->epoch;
-		ret = pthread_create(t->threads[iter], NULL, \
+		ret = pthread_create(&t->threads[iter], NULL, \
 							be_philosopher, p_db[iter]);
 		if (ret > 0)
 		{
-			free_threads(t->threads, iter);
+			free(t->threads);
 			return (FALSE);
 		}
 		iter++;

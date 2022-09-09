@@ -89,7 +89,8 @@ void	check_death(t_philo *p, t_table *t)
 			pthread_mutex_unlock(p->l_fork);
 			pthread_mutex_unlock(p->r_fork);
 		}
-		printf("%ld %ld died\n", time_since(t->epoch, exact_time()), p->index);
+		if (!t->gedood)
+			printf("%ld %ld died\n", time_since(t->epoch, exact_time()), p->index);
 		p->death = TRUE;
 		pthread_mutex_unlock(t->dood_mutex);
 		pthread_exit(NULL);

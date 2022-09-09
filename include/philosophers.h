@@ -67,7 +67,7 @@ typedef struct s_philo {
 typedef struct s_table {
 	pthread_mutex_t	*prnt_lck;
 	pthread_mutex_t	*dood_mutex;
-	pthread_t		**threads;
+	pthread_t		*threads;
 	t_philo			**philo_db;
 	size_t			n_philo;
 	size_t			time_to_die;
@@ -97,9 +97,9 @@ size_t	time_since(size_t epoch, size_t current);
 void	i_sleep(int milsecs, t_philo *p, t_table *t);
 
 /* DEALLOCATION FUNCTIONS */
-void	free_threads(pthread_t **threads, int n_philo);
 void	free_philosophers(t_philo **p_db, int n_philo);
 void	free_table(t_table *t);
+void	join_threads(int n_philo, pthread_t *thread_db);
 
 /* UTILITY FUNCTIONS */
 int		ft_atoi(const char *str);
