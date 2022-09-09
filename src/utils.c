@@ -48,11 +48,11 @@ static int	ft_isspace(char c)
 		return (FALSE);
 }
 
-int	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
-	int	iterator;
-	int	nbr;
-	int	minus;
+	long	iterator;
+	long	nbr;
+	long	minus;
 
 	nbr = 0;
 	iterator = 0;

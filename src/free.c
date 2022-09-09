@@ -62,6 +62,8 @@ void	free_table(t_table *t)
 	free_philosophers(t->philo_db, t->n_philo);
 	pthread_mutex_unlock(t->prnt_lck);
 	pthread_mutex_destroy(t->prnt_lck);
+	pthread_mutex_destroy(t->philo_mutex);
 	free(t->prnt_lck);
+	free(t->philo_mutex);
 	free(t);
 }

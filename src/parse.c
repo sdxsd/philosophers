@@ -38,6 +38,7 @@ A program is free software if users have all of these freedoms.
 */
 
 #include "../include/philosophers.h"
+#include <limits.h>
 
 int	chk_string(char *string)
 {
@@ -53,7 +54,11 @@ int	chk_string(char *string)
 int	chk_args(char **args)
 {
 	while (*(args))
+	{
 		if (!chk_string(*args++))
 			return (FALSE);
+		if (ft_atoi(*args) > INT_MAX || ft_atoi(*args) < INT_MIN)
+			return (FALSE);
+	}
 	return (TRUE);
 }

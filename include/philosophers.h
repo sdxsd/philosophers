@@ -102,7 +102,7 @@ void	free_table(t_table *t);
 void	join_threads(int n_philo, pthread_t *thread_db);
 
 /* UTILITY FUNCTIONS */
-int		ft_atoi(const char *str);
+long	ft_atoi(const char *str);
 int		chk_string(char *string);
 int		chk_args(char **args);
 
