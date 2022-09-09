@@ -51,6 +51,7 @@ void	join_threads(int n_philo, pthread_t *thread_db)
 		pthread_join(thread_db[iter], NULL);
 		iter++;
 	}
+	return ;
 }
 
 int	init_threads(int n_philo, t_philo **p_db, t_table *t)

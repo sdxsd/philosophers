@@ -5,7 +5,7 @@
 # @version 0.1
 
 CC = clang
-CFLAGS = -g -Wall -Wextra -Werror -pthread # -fsanitize=thread  -fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror -pthread -fsanitize=thread ## -fsanitize=address
 NAME = philo
 CFILES = \
 		src/main.c \

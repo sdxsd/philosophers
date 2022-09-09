@@ -43,6 +43,7 @@ A program is free software if users have all of these freedoms.
 
 void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 {
+	check_death(t->philo_db[index - 1], t);
 	pthread_mutex_lock(t->prnt_lck);
 	if (state == sleeping)
 		printf("%ld %ld is sleeping\n", milsec, index);
@@ -63,6 +64,7 @@ void	philo_think(t_philo *philo, t_table *t)
 void	philo_sleep(t_philo *philo, t_table *t)
 {
 	philo->state = sleeping;
+	check_death(philo, t);
 	print_state(time_since(t->epoch, exact_time()), \
 				philo->state, philo->index, t);
 	i_sleep(t->time_to_sleep, philo, t);
@@ -70,6 +72,7 @@ void	philo_sleep(t_philo *philo, t_table *t)
 
 void	philo_eat(t_philo *philo, t_table *t)
 {
+	check_death(philo, t);
 	pthread_mutex_lock(philo->l_fork);
 	pthread_mutex_lock(philo->r_fork);
 	philo->state = eating;
