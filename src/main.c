@@ -130,15 +130,16 @@ void	big_brother(t_table *table)
 	while (nietszche->r_philo)
 	{
 		ret = check_sated(table);
+		pthread_mutex_lock(table->philo_mutex);
 		if (nietszche->death || ret)
 		{
 			pthread_mutex_lock(table->prnt_lck);
-			pthread_mutex_lock(table->philo_mutex);
 			table->gedood = TRUE;
 			pthread_mutex_unlock(table->philo_mutex);
 			free_table(table, time_since(table->epoch, exact_time()), nietszche->index, ret);
 			break ;
 		}
+		pthread_mutex_unlock(table->philo_mutex);
 		nietszche = nietszche->r_philo;
 	}
 }
