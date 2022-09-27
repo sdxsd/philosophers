@@ -57,7 +57,7 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	new_philo->r_philo = r_philo;
 	new_philo->death = FALSE;
 	new_philo->sated = FALSE;
-	if (index > 1)
+	if (index > 0)
 		new_philo->l_fork = l_philo->r_fork;
 	new_philo->r_fork = malloc(sizeof(pthread_mutex_t));
 	ret = pthread_mutex_init(new_philo->r_fork, NULL);
@@ -74,7 +74,7 @@ t_philo	*populate_table(t_philo *p1, t_philo **db, int n)
 	iter = 1;
 	while (iter < n)
 	{
-		p2 = init_philosopher(p1, NULL, iter + 1);
+		p2 = init_philosopher(p1, NULL, iter);
 		if (!p2)
 			return (NULL);
 		else
@@ -95,7 +95,7 @@ t_philo	**init_philosophers(int n_philos)
 	if (n_philos == 1)
 		return (lonely_philo());
 	philosophers_db = malloc(sizeof(t_philo *) * n_philos);
-	initial_philo = init_philosopher(NULL, NULL, 1);
+	initial_philo = init_philosopher(NULL, NULL, 0);
 	if (!initial_philo || !philosophers_db)
 		return (NULL);
 	philo_1 = initial_philo;

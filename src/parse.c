@@ -55,10 +55,11 @@ int	chk_args(char **args)
 {
 	while (*(args))
 	{
-		if (!chk_string(*args++))
+		if (!chk_string(*args))
 			return (FALSE);
 		if (ft_atoi(*args) > INT_MAX || ft_atoi(*args) < INT_MIN)
 			return (FALSE);
+		args++;
 	}
 	return (TRUE);
 }

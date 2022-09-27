@@ -43,7 +43,7 @@ A program is free software if users have all of these freedoms.
 
 void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 {
-	check_death(t->philo_db[index - 1], t);
+	check_death(t->philo_db[index], t);
 	pthread_mutex_lock(t->prnt_lck);
 	if (state == sleeping)
 		printf("%ld %ld is sleeping\n", milsec, index);

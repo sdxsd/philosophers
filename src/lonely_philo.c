@@ -56,6 +56,7 @@ t_philo	**lonely_philo(void)
 	new_philo->r_philo = new_philo;
 	new_philo->death = FALSE;
 	new_philo->sated = FALSE;
+	new_philo->eat_cnt = 0;
 	new_philo->r_fork = malloc(sizeof(pthread_mutex_t));
 	if (!new_philo->r_fork)
 		return (NULL);
