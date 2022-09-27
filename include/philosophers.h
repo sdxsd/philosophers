@@ -98,7 +98,7 @@ void	i_sleep(int milsecs, t_philo *p, t_table *t);
 
 /* DEALLOCATION FUNCTIONS */
 void	free_philosophers(t_philo **p_db, int n_philo);
-void	free_table(t_table *t);
+void	free_table(t_table *t, long todeath, long index, int d);
 void	join_threads(int n_philo, pthread_t *thread_db);
 
 /* UTILITY FUNCTIONS */

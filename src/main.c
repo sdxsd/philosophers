@@ -89,8 +89,6 @@ void	check_death(t_philo *p, t_table *t)
 			pthread_mutex_unlock(p->l_fork);
 			pthread_mutex_unlock(p->r_fork);
 		}
-		if (!t->gedood)
-			printf("%ld %ld died\n", time_since(t->epoch, exact_time()), p->index);
 		p->death = TRUE;
 		pthread_mutex_unlock(t->philo_mutex);
 		pthread_exit(NULL);
@@ -126,22 +124,23 @@ int	check_sated(t_table *table)
 void	big_brother(t_table *table)
 {
 	t_philo	*nietszche;
+	int		ret;
 
 	nietszche = table->philo_db[0];
 	while (nietszche->r_philo)
 	{
-		if (nietszche->death || check_sated(table))
+		ret = check_sated(table);
+		if (nietszche->death || ret)
 		{
 			pthread_mutex_lock(table->prnt_lck);
 			pthread_mutex_lock(table->philo_mutex);
 			table->gedood = TRUE;
 			pthread_mutex_unlock(table->philo_mutex);
+			free_table(table, time_since(table->epoch, exact_time()), nietszche->index, ret);
 			break ;
 		}
 		nietszche = nietszche->r_philo;
 	}
-	usleep(4096);
-	free_table(table);
 }
 
 int	main(int argc, char	*argv[])

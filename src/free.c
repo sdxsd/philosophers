@@ -39,6 +39,7 @@ A program is free software if users have all of these freedoms.
 
 #include "../include/philosophers.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 void	free_philosophers(t_philo **p_db, int n_philo)
 {
@@ -55,12 +56,15 @@ void	free_philosophers(t_philo **p_db, int n_philo)
 	free(p_db);
 }
 
-void	free_table(t_table *t)
+void	free_table(t_table *t, long todeath, long index, int d)
 {
+	pthread_mutex_unlock(t->prnt_lck);
+	pthread_mutex_unlock(t->philo_mutex);
 	join_threads(t->n_philo, t->threads);
+	if (!d)
+		printf("%ld %ld died\n", todeath, index);
 	free(t->threads);
 	free_philosophers(t->philo_db, t->n_philo);
-	pthread_mutex_unlock(t->prnt_lck);
 	pthread_mutex_destroy(t->prnt_lck);
 	pthread_mutex_destroy(t->philo_mutex);
 	free(t->prnt_lck);
