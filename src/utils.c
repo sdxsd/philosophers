@@ -48,6 +48,16 @@ static int	ft_isspace(char c)
 		return (FALSE);
 }
 
+static int	num_spaces(const char *str)
+{
+	int	iter;
+
+	iter = 0;
+	while (ft_isspace(str[iter]))
+		iter++;
+	return (iter);
+}
+
 long	ft_atoi(const char *str)
 {
 	long	iterator;
@@ -56,8 +66,8 @@ long	ft_atoi(const char *str)
 
 	nbr = 0;
 	iterator = 0;
-	while (ft_isspace(str[iterator]))
-		iterator++;
+	minus = 0;
+	iterator += num_spaces(str);
 	if (str[iterator] == '-' || str[iterator] == '+')
 	{
 		if (str[iterator + 1] == '+' || str[iterator + 1] == '-')
