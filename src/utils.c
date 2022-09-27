@@ -56,13 +56,10 @@ long	ft_atoi(const char *str)
 
 	nbr = 0;
 	iterator = 0;
-	minus = 0;
 	while (ft_isspace(str[iterator]))
 		iterator++;
 	if (str[iterator] == '-' || str[iterator] == '+')
 	{
-		if (str[iterator] == '-')
-			minus = -1;
 		if (str[iterator + 1] == '+' || str[iterator + 1] == '-')
 			return (0);
 		++iterator;

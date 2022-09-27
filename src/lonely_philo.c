@@ -40,6 +40,17 @@ A program is free software if users have all of these freedoms.
 #include "../include/philosophers.h"
 #include <stdlib.h>
 
+static void	set_values(t_philo *new_philo)
+{
+	new_philo->state = sleeping;
+	new_philo->index = 0;
+	new_philo->l_philo = NULL;
+	new_philo->r_philo = new_philo;
+	new_philo->death = FALSE;
+	new_philo->sated = FALSE;
+	new_philo->eat_cnt = 0;
+}
+
 t_philo	**lonely_philo(void)
 {
 	t_philo	*new_philo;
@@ -50,13 +61,7 @@ t_philo	**lonely_philo(void)
 	if (!new_philo)
 		return (NULL);
 	*p_db = new_philo;
-	new_philo->state = sleeping;
-	new_philo->index = 0;
-	new_philo->l_philo = NULL;
-	new_philo->r_philo = new_philo;
-	new_philo->death = FALSE;
-	new_philo->sated = FALSE;
-	new_philo->eat_cnt = 0;
+	set_values(new_philo);
 	new_philo->r_fork = malloc(sizeof(pthread_mutex_t));
 	if (!new_philo->r_fork)
 		return (NULL);
