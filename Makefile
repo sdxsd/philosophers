@@ -4,8 +4,8 @@
 # @file
 # @version 0.1
 
-CC = clang
-CFLAGS = -g -Wall -Wextra -Werror -pthread -fsanitize=thread
+CC = gcc
+CFLAGS = -g -Wall -Wextra -Werror -pthread
 NAME = philo
 CFILES = \
 		src/main.c \

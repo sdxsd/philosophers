@@ -51,6 +51,7 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	new_philo = malloc(sizeof(t_philo));
 	if (!new_philo)
 		return (NULL);
+	new_philo->eat_cnt = 0;
 	new_philo->state = sleeping;
 	new_philo->index = index;
 	new_philo->l_philo = l_philo;
