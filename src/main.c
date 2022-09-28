@@ -54,6 +54,7 @@ void	check_death(t_philo *p, t_table *t)
 			pthread_mutex_unlock(p->l_fork);
 			pthread_mutex_unlock(p->r_fork);
 		}
+		t->time_of_death = time_since(t->epoch, exact_time());
 		p->death = TRUE;
 		pthread_mutex_unlock(t->philo_mutex);
 		pthread_exit(NULL);
@@ -102,7 +103,7 @@ void	big_brother(t_table *table)
 		{
 			table->gedood = TRUE;
 			pthread_mutex_unlock(table->philo_mutex);
-			free_table(table, time_since(table->epoch, exact_time()), nietszche->index, ret);
+			free_table(table, table->time_of_death, nietszche->index, ret);
 			break ;
 		}
 		pthread_mutex_unlock(table->philo_mutex);
