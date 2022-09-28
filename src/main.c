@@ -54,7 +54,12 @@ void	check_death(t_philo *p, t_table *t)
 			pthread_mutex_unlock(p->l_fork);
 			pthread_mutex_unlock(p->r_fork);
 		}
-		t->time_of_death = time_since(t->epoch, exact_time());
+		if (t->gedood == FALSE)
+		{
+			t->deadite = p->index;
+			t->time_of_death = time_since(t->epoch, exact_time());
+			t->gedood = TRUE;
+		}
 		p->death = TRUE;
 		pthread_mutex_unlock(t->philo_mutex);
 		pthread_exit(NULL);
@@ -90,24 +95,22 @@ int	check_sated(t_table *table)
 /* Big brother is always watching  */
 void	big_brother(t_table *table)
 {
-	t_philo	*nietszche;
 	int		ret;
 
-	nietszche = table->philo_db[0];
-	while (nietszche->r_philo)
+	while (TRUE)
 	{
 		usleep(4096);
 		ret = check_sated(table);
 		pthread_mutex_lock(table->philo_mutex);
-		if (nietszche->death || ret)
+		if (table->gedood || ret)
 		{
-			table->gedood = TRUE;
+			if (ret)
+				table->gedood = TRUE;
 			pthread_mutex_unlock(table->philo_mutex);
-			free_table(table, table->time_of_death, nietszche->index, ret);
+			free_table(table, table->time_of_death, table->deadite, ret);
 			break ;
 		}
 		pthread_mutex_unlock(table->philo_mutex);
-		nietszche = nietszche->r_philo;
 	}
 }
 

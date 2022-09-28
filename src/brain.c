@@ -44,12 +44,15 @@ A program is free software if users have all of these freedoms.
 void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 {
 	pthread_mutex_lock(t->prnt_lck);
-	if (state == sleeping)
-		printf("%ld %ld is sleeping\n", milsec, index);
-	else if (state == eating)
-		printf("%ld %ld is eating\n", milsec, index);
-	else
-		printf("%ld %ld is thinking\n", milsec, index);
+	if (!t->gedood)
+	{
+		if (state == sleeping)
+			printf("%ld %ld is sleeping\n", milsec, index);
+		else if (state == eating)
+			printf("%ld %ld is eating\n", milsec, index);
+		else
+			printf("%ld %ld is thinking\n", milsec, index);
+	}
 	pthread_mutex_unlock(t->prnt_lck);
 }
 

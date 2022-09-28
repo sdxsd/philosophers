@@ -76,6 +76,7 @@ typedef struct s_table {
 	size_t			eat_count;
 	size_t			epoch;
 	size_t			time_of_death;
+	size_t			deadite;
 	bool			gedood;
 }	t_table;
 
