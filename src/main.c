@@ -107,7 +107,11 @@ void	big_brother(t_table *table)
 		if (table->gedood || ret)
 		{
 			if (ret)
+			{
+				pthread_mutex_lock(table->prnt_lck);
 				table->gedood = TRUE;
+				pthread_mutex_unlock(table->prnt_lck);
+			}
 			pthread_mutex_unlock(table->philo_mutex);
 			free_table(table, table->time_of_death, table->deadite, ret);
 			break ;
