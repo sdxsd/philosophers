@@ -105,6 +105,7 @@ int	check_sated(t_table *table)
 		return (FALSE);
 	while (iter < table->n_philo)
 	{
+		usleep(4096);
 		pthread_mutex_lock(table->philo_mutex);
 		if (table->philo_db[iter]->sated)
 			;
@@ -129,11 +130,11 @@ void	big_brother(t_table *table)
 	nietszche = table->philo_db[0];
 	while (nietszche->r_philo)
 	{
+		usleep(4096);
 		ret = check_sated(table);
 		pthread_mutex_lock(table->philo_mutex);
 		if (nietszche->death || ret)
 		{
-			pthread_mutex_lock(table->prnt_lck);
 			table->gedood = TRUE;
 			pthread_mutex_unlock(table->philo_mutex);
 			free_table(table, time_since(table->epoch, exact_time()), nietszche->index, ret);

@@ -63,7 +63,6 @@ void	free_table(t_table *t, long todeath, long index, int d)
 		printf("%ld %ld died\n", todeath, index);
 	free(t->threads);
 	free_philosophers(t->philo_db, t->n_philo);
-	pthread_mutex_unlock(t->prnt_lck);
 	pthread_mutex_destroy(t->prnt_lck);
 	pthread_mutex_destroy(t->philo_mutex);
 	free(t->prnt_lck);
