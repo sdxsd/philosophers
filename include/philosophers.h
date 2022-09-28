@@ -106,4 +106,7 @@ long	ft_atoi(const char *str);
 int		chk_string(char *string);
 int		chk_args(char **args);
 
+/* TABLE CONSTRUCTION FUNCTIONS */
+t_table	*construct_table(int args, char **argv);
+
 #endif // PHILOSOPHERS_H

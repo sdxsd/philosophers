@@ -42,41 +42,6 @@ A program is free software if users have all of these freedoms.
 #include <stdio.h>
 #include <unistd.h>
 
-t_table	*construct_table(int args, char **argv)
-{
-	t_table	*table;
-	int		ret;
-
-	table = malloc(sizeof(t_table));
-	if (!table)
-		return (NULL);
-	table->n_philo = ft_atoi(argv[0]);
-	table->time_to_die = ft_atoi(argv[1]);
-	table->time_to_eat = ft_atoi(argv[2]);
-	table->time_to_sleep = ft_atoi(argv[3]);
-	if (args > 4)
-		table->eat_count = ft_atoi(argv[4]);
-	else
-		table->eat_count = 0;
-	table->philo_db = init_philosophers(table->n_philo);
-	if (!table->philo_db)
-		return (NULL);
-	table->prnt_lck = malloc(sizeof(pthread_mutex_t));
-	if (!table->prnt_lck)
-		return (NULL);
-	table->philo_mutex = malloc(sizeof(pthread_mutex_t));
-	if (!table->philo_mutex)
-		return (NULL);
-	ret = pthread_mutex_init(table->prnt_lck, NULL);
-	if (ret > 0)
-		return (NULL);
-	ret = pthread_mutex_init(table->philo_mutex, NULL);
-	if (ret > 0)
-		return (NULL);
-	table->gedood = FALSE;
-	return (table);
-}
-
 void	check_death(t_philo *p, t_table *t)
 {
 	pthread_mutex_lock(t->philo_mutex);
