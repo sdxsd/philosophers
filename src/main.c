@@ -49,6 +49,7 @@ void	check_death(t_philo *p, t_table *t)
 		p->sated = TRUE;
 	if (time_since(p->hunger, exact_time()) > t->time_to_die || t->gedood)
 	{
+		pthread_mutex_lock(t->prnt_lck);
 		if (p->state == eating)
 		{
 			pthread_mutex_unlock(p->l_fork);
@@ -62,6 +63,7 @@ void	check_death(t_philo *p, t_table *t)
 		}
 		p->death = TRUE;
 		pthread_mutex_unlock(t->philo_mutex);
+		pthread_mutex_unlock(t->prnt_lck);
 		pthread_exit(NULL);
 	}
 	pthread_mutex_unlock(t->philo_mutex);
