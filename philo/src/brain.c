@@ -97,7 +97,8 @@ void	*be_philosopher(void *p)
 		usleep(128);
 	while (TRUE)
 	{
-		philo_eat(philo, table);
+		if (!philo->sated)
+			philo_eat(philo, table);
 		philo_sleep(philo, table);
 		philo_think(philo, table);
 	}

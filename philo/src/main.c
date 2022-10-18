@@ -140,7 +140,7 @@ int	main(int argc, char	*argv[])
 	if (!init_threads(table->n_philo, table->philo_db, table))
 	{
 		free_table(table, table->time_to_die, 0, 1);
-		return (0);
+		return (-1);
 	}
 	big_brother(table);
 	return (0);

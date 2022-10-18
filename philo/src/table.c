@@ -44,6 +44,7 @@ void	set_variables(t_table *table, int args, char **argv)
 {
 	table->time_of_death = 0;
 	table->deadite = 0;
+	table->gedood = FALSE;
 	table->n_philo = ft_atoi(argv[0]);
 	table->time_to_die = ft_atoi(argv[1]);
 	table->time_to_eat = ft_atoi(argv[2]);
@@ -65,19 +66,18 @@ t_table	*construct_table(int args, char **argv)
 	set_variables(table, args, argv);
 	table->philo_db = init_philosophers(table->n_philo);
 	if (!table->philo_db && table->n_philo > 2)
-		return (NULL);
+		return (free_table(table, 0, 0, 1));
 	table->prnt_lck = malloc(sizeof(pthread_mutex_t));
 	if (!table->prnt_lck)
-		return (NULL);
+		return (free_table(table, 0, 0, 1));
 	table->philo_mutex = malloc(sizeof(pthread_mutex_t));
 	if (!table->philo_mutex)
-		return (NULL);
+		return (free_table(table, 0, 0, 1));
 	ret = pthread_mutex_init(table->prnt_lck, NULL);
 	if (ret > 0)
-		return (NULL);
+		return (free_table(table, 0, 0, 1));
 	ret = pthread_mutex_init(table->philo_mutex, NULL);
 	if (ret > 0)
-		return (NULL);
-	table->gedood = FALSE;
+		return (free_table(table, 0, 0, 1));
 	return (table);
 }

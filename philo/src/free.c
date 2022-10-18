@@ -66,7 +66,7 @@ void	free_philosophers(t_philo **p_db, int n_philo)
 	free(p_db);
 }
 
-void	free_table(t_table *t, long todeath, long index, int d)
+void	*free_table(t_table *t, long todeath, long index, int d)
 {
 	if (t->threads)
 		join_threads(t->n_philo, t->threads);
@@ -76,9 +76,16 @@ void	free_table(t_table *t, long todeath, long index, int d)
 		free(t->threads);
 	if (t->philo_db)
 		free_philosophers(t->philo_db, t->n_philo);
-	pthread_mutex_destroy(t->prnt_lck);
-	pthread_mutex_destroy(t->philo_mutex);
-	free(t->prnt_lck);
-	free(t->philo_mutex);
+	if (t->prnt_lck)
+	{
+		pthread_mutex_destroy(t->prnt_lck);
+		free(t->prnt_lck);
+	}
+	if (t->philo_mutex)
+	{
+		pthread_mutex_destroy(t->philo_mutex);
+		free(t->philo_mutex);
+	}
 	free(t);
+	return (NULL);
 }
