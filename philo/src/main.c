@@ -131,8 +131,10 @@ int	main(int argc, char	*argv[])
 	table = construct_table(argc - 1, argv + 1);
 	if (!table)
 		return (-1);
-	if (table->n_philo < 2)
+	if (table->n_philo < 2 || (table->eat_count == 0 && argc > 5))
 	{
+		if (table->eat_count < 1 && argc > 5)
+			return (0);
 		usleep(table->time_to_die * 1000);
 		free_table(table, table->time_to_die, 0, 0);
 		return (0);
