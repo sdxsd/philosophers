@@ -63,3 +63,12 @@ size_t	time_since(size_t epoch, size_t current)
 {
 	return ((current - epoch));
 }
+
+void	acc_usleep(size_t milliseconds)
+{
+	size_t	curr;
+
+	curr = exact_time();
+	while (exact_time() - curr < milliseconds)
+		usleep(10);
+}

@@ -48,6 +48,7 @@ enum e_states {
 	EATING,
 	THINKING,
 	SLEEPING,
+	TAK_FORK,
 };
 
 enum e_philo_status {
@@ -101,6 +102,7 @@ size_t	exact_time(void);
 size_t	sec_to_mil(size_t seconds);
 size_t	mic_to_mil(size_t mic_seconds);
 size_t	time_since(size_t epoch, size_t current);
+void	acc_usleep(size_t milliseconds);
 
 /* DEALLOCATION FUNCTIONS */
 void	free_philosophers(t_philo **p_db, int n_philo);

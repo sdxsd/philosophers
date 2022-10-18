@@ -54,7 +54,7 @@ int	check_philo(t_table *table)
 			;
 		else if (time_since(table->philo_db[iter]->hunger, exact_time()) > table->time_to_die)
 		{
-			printf("%ld %ld died\n", time_since(table->epoch, exact_time()), table->philo_db[iter]->index);
+			printf("%ld %ld has died\n", time_since(table->epoch, exact_time()), table->philo_db[iter]->index + 1);
 			pthread_mutex_unlock(table->philo_mutex);
 			return (DEATH);
 		}
@@ -76,7 +76,6 @@ void	big_brother(t_table *table)
 
 	while (TRUE)
 	{
-		usleep(256);
 		ret = check_philo(table);
 		if (ret == SATED)
 		{
