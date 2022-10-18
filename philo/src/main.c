@@ -138,7 +138,10 @@ int	main(int argc, char	*argv[])
 		return (0);
 	}
 	if (!init_threads(table->n_philo, table->philo_db, table))
-		return (-1);
+	{
+		free_table(table, table->time_to_die, 0, 1);
+		return (0);
+	}
 	big_brother(table);
 	return (0);
 }
