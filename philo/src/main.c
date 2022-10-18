@@ -42,6 +42,22 @@ A program is free software if users have all of these freedoms.
 #include <stdio.h>
 #include <unistd.h>
 
+void	check_death(t_philo *p, t_table *t)
+{
+	pthread_mutex_lock(t->prnt_lck);
+	if (t->gedood)
+	{
+		pthread_mutex_unlock(t->prnt_lck);
+		if (p->state == EATING)
+		{
+			pthread_mutex_unlock(p->l_fork);
+			pthread_mutex_unlock(p->r_fork);
+		}
+		pthread_exit(0);
+	}
+	pthread_mutex_unlock(t->prnt_lck);
+}
+
 int	check_philo(t_table *table)
 {
 	size_t	iter;
@@ -77,14 +93,11 @@ void	big_brother(t_table *table)
 	while (TRUE)
 	{
 		ret = check_philo(table);
-		if (ret == SATED)
+		if (ret == SATED || ret == DEATH)
 		{
+			pthread_mutex_lock(table->prnt_lck);
 			table->gedood = TRUE;
-			break ;
-		}
-		if (ret == DEATH)
-		{
-			table->gedood = TRUE;
+			pthread_mutex_unlock(table->prnt_lck);
 			free_table(table, table->time_of_death, table->deadite, ret);
 			break ;
 		}

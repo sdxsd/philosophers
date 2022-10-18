@@ -46,7 +46,7 @@ void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 	pthread_mutex_lock(t->prnt_lck);
 	if (!t->gedood)
 	{
-	pthread_mutex_unlock(t->prnt_lck);
+		pthread_mutex_unlock(t->prnt_lck);
 		if (state == SLEEPING)
 			printf("%ld %ld is sleeping\n", milsec, index + 1);
 		else if (state == EATING)
@@ -56,6 +56,7 @@ void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 		else
 			printf("%ld %ld is thinking\n", milsec, index + 1);
 	}
+	pthread_mutex_unlock(t->prnt_lck);
 }
 
 void	philo_think(t_philo *philo, t_table *t)
@@ -63,6 +64,7 @@ void	philo_think(t_philo *philo, t_table *t)
 	philo->state = THINKING;
 	print_state(time_since(t->epoch, exact_time()), \
 				philo->state, philo->index, t);
+	check_death(philo, t);
 }
 
 void	philo_sleep(t_philo *philo, t_table *t)
@@ -70,6 +72,7 @@ void	philo_sleep(t_philo *philo, t_table *t)
 	philo->state = SLEEPING;
 	print_state(time_since(t->epoch, exact_time()), \
 				philo->state, philo->index, t);
+	check_death(philo, t);
 	acc_usleep(t->time_to_sleep);
 }
 
@@ -103,6 +106,7 @@ void	*be_philosopher(void *p)
 		usleep(128);
 	while (TRUE)
 	{
+		check_death(philo, table);
 		philo_eat(philo, table);
 		philo_sleep(philo, table);
 		philo_think(philo, table);
