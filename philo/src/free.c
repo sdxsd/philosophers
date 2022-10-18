@@ -68,11 +68,14 @@ void	free_philosophers(t_philo **p_db, int n_philo)
 
 void	free_table(t_table *t, long todeath, long index, int d)
 {
-	join_threads(t->n_philo, t->threads);
+	if (t->threads)
+		join_threads(t->n_philo, t->threads);
 	if (!d)
 		printf("%ld %ld died\n", todeath, index);
-	free(t->threads);
-	free_philosophers(t->philo_db, t->n_philo);
+	if (t->threads)
+		free(t->threads);
+	if (t->philo_db)
+		free_philosophers(t->philo_db, t->n_philo);
 	pthread_mutex_destroy(t->prnt_lck);
 	pthread_mutex_destroy(t->philo_mutex);
 	free(t->prnt_lck);

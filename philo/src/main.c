@@ -131,6 +131,12 @@ int	main(int argc, char	*argv[])
 	table = construct_table(argc - 1, argv + 1);
 	if (!table)
 		return (-1);
+	if (table->n_philo < 2)
+	{
+		usleep(table->time_to_die * 1000);
+		free_table(table, table->time_to_die, 0, 0);
+		return (0);
+	}
 	if (!init_threads(table->n_philo, table->philo_db, table))
 		return (-1);
 	big_brother(table);

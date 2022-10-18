@@ -64,7 +64,7 @@ t_table	*construct_table(int args, char **argv)
 		return (NULL);
 	set_variables(table, args, argv);
 	table->philo_db = init_philosophers(table->n_philo);
-	if (!table->philo_db)
+	if (!table->philo_db && table->n_philo > 2)
 		return (NULL);
 	table->prnt_lck = malloc(sizeof(pthread_mutex_t));
 	if (!table->prnt_lck)

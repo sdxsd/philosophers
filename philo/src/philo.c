@@ -43,6 +43,15 @@ A program is free software if users have all of these freedoms.
 #include "../include/philosophers.h"
 #include <stdlib.h>
 
+void	set_values(t_philo *philo, int index)
+{
+	philo->eat_cnt = 0;
+	philo->state = sleeping;
+	philo->index = index;
+	philo->death = FALSE;
+	philo->sated = FALSE;
+}
+
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 {
 	t_philo	*new_philo;
@@ -51,19 +60,24 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	new_philo = malloc(sizeof(t_philo));
 	if (!new_philo)
 		return (NULL);
-	new_philo->eat_cnt = 0;
-	new_philo->state = sleeping;
-	new_philo->index = index;
+	set_values(new_philo, index);
 	new_philo->l_philo = l_philo;
 	new_philo->r_philo = r_philo;
-	new_philo->death = FALSE;
-	new_philo->sated = FALSE;
 	if (index > 0)
 		new_philo->l_fork = l_philo->r_fork;
 	new_philo->r_fork = malloc(sizeof(pthread_mutex_t));
+	if (!new_philo->r_fork)
+	{
+		free(new_philo);
+		return (NULL);
+	}
 	ret = pthread_mutex_init(new_philo->r_fork, NULL);
 	if (ret > 0)
+	{
+		free(new_philo->r_fork);
+		free(new_philo);
 		return (NULL);
+	}
 	return (new_philo);
 }
 
@@ -93,11 +107,13 @@ t_philo	**init_philosophers(int n_philos)
 	t_philo	*initial_philo;
 	t_philo	*philo_1;
 
-	if (n_philos == 1)
-		return (lonely_philo());
+	if (n_philos < 2)
+		return (NULL);
 	philosophers_db = malloc(sizeof(t_philo *) * n_philos);
+	if (!philosophers_db)
+		return (NULL);
 	initial_philo = init_philosopher(NULL, NULL, 0);
-	if (!initial_philo || !philosophers_db)
+	if (!initial_philo)
 		return (NULL);
 	philo_1 = initial_philo;
 	philosophers_db[0] = initial_philo;
