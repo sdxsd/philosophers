@@ -81,6 +81,24 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	return (new_philo);
 }
 
+void	*init_philo_fail(t_philo **db, int n_philos)
+{
+	int	iter;
+
+	while (iter < n_philos)
+	{
+		if (db[iter]->r_fork)
+		{
+			pthread_mutex_destroy(db[iter]->r_fork);
+			free(db[iter]->r_fork);
+		}
+		free(db[iter]);
+		iter++;
+	}
+	free(db);
+	return (NULL);
+}
+
 t_philo	*populate_table(t_philo *p1, t_philo **db, int n)
 {
 	t_philo	*p2;
@@ -91,7 +109,7 @@ t_philo	*populate_table(t_philo *p1, t_philo **db, int n)
 	{
 		p2 = init_philosopher(p1, NULL, iter);
 		if (!p2)
-			return (NULL);
+			return (init_philo_fail(db, iter - 1));
 		else
 			p1->r_philo = p2;
 		p1 = p2;
@@ -114,10 +132,15 @@ t_philo	**init_philosophers(int n_philos)
 		return (NULL);
 	initial_philo = init_philosopher(NULL, NULL, 0);
 	if (!initial_philo)
+	{
+		free(philosophers_db);
 		return (NULL);
+	}
 	philo_1 = initial_philo;
 	philosophers_db[0] = initial_philo;
 	philo_1 = populate_table(philo_1, philosophers_db, n_philos);
+	if (!philo_1)
+		return (NULL);
 	philo_1->r_philo = initial_philo;
 	initial_philo->l_philo = philo_1;
 	initial_philo->l_fork = philo_1->r_fork;
