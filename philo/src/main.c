@@ -42,33 +42,6 @@ A program is free software if users have all of these freedoms.
 #include <stdio.h>
 #include <unistd.h>
 
-void	check_death(t_philo *p, t_table *t)
-{
-	pthread_mutex_lock(t->philo_mutex);
-	if (p->eat_cnt >= t->eat_count)
-		p->sated = TRUE;
-	if (time_since(p->hunger, exact_time()) > t->time_to_die || t->gedood)
-	{
-		pthread_mutex_lock(t->prnt_lck);
-		if (p->state == eating)
-		{
-			pthread_mutex_unlock(p->l_fork);
-			pthread_mutex_unlock(p->r_fork);
-		}
-		if (t->gedood == FALSE)
-		{
-			t->deadite = p->index;
-			t->time_of_death = time_since(t->epoch, exact_time());
-			t->gedood = TRUE;
-		}
-		p->death = TRUE;
-		pthread_mutex_unlock(t->philo_mutex);
-		pthread_mutex_unlock(t->prnt_lck);
-		pthread_exit(NULL);
-	}
-	pthread_mutex_unlock(t->philo_mutex);
-}
-
 int	check_sated(t_table *table)
 {
 	size_t	iter;
@@ -78,9 +51,8 @@ int	check_sated(t_table *table)
 		return (FALSE);
 	while (iter < table->n_philo)
 	{
-		usleep(4096);
 		pthread_mutex_lock(table->philo_mutex);
-		if (table->philo_db[iter]->sated)
+		if (table->philo_db[iter]->eat_cnt > table->eat_count)
 			;
 		else
 		{
@@ -90,7 +62,6 @@ int	check_sated(t_table *table)
 		pthread_mutex_unlock(table->philo_mutex);
 		iter++;
 	}
-	usleep(4096);
 	return (TRUE);
 }
 

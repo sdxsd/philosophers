@@ -63,16 +63,3 @@ size_t	time_since(size_t epoch, size_t current)
 {
 	return ((current - epoch));
 }
-
-void	i_sleep(int milsecs, t_philo *p, t_table *t)
-{
-	int	iter;
-
-	iter = 0;
-	while (iter < milsecs)
-	{
-		usleep(((milsecs * 1000) / 10));
-		iter += milsecs / 10;
-		check_death(p, t);
-	}
-}

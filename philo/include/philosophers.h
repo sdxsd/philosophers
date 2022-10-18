@@ -61,7 +61,6 @@ typedef struct s_philo {
 	pthread_mutex_t	*r_fork;
 	void			*table;
 	bool			death;
-	bool			sated;
 }	t_philo;
 
 typedef struct s_table {
@@ -96,7 +95,6 @@ size_t	exact_time(void);
 size_t	sec_to_mil(size_t seconds);
 size_t	mic_to_mil(size_t mic_seconds);
 size_t	time_since(size_t epoch, size_t current);
-void	i_sleep(int milsecs, t_philo *p, t_table *t);
 
 /* DEALLOCATION FUNCTIONS */
 void	free_philosophers(t_philo **p_db, int n_philo);

@@ -49,7 +49,6 @@ void	set_values(t_philo *philo, int index)
 	philo->state = sleeping;
 	philo->index = index;
 	philo->death = FALSE;
-	philo->sated = FALSE;
 }
 
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
