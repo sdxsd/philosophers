@@ -66,18 +66,18 @@ t_table	*construct_table(int args, char **argv)
 	set_variables(table, args, argv);
 	table->philo_db = init_philosophers(table->n_philo);
 	if (!table->philo_db && table->n_philo > 2)
-		return (free_table(table, 0, 0, 1));
+		return (free_table(table));
 	table->prnt_lck = malloc(sizeof(pthread_mutex_t));
 	if (!table->prnt_lck)
-		return (free_table(table, 0, 0, 1));
+		return (free_table(table));
 	table->philo_mutex = malloc(sizeof(pthread_mutex_t));
 	if (!table->philo_mutex)
-		return (free_table(table, 0, 0, 1));
+		return (free_table(table));
 	ret = pthread_mutex_init(table->prnt_lck, NULL);
 	if (ret > 0)
-		return (free_table(table, 0, 0, 1));
+		return (free_table(table));
 	ret = pthread_mutex_init(table->philo_mutex, NULL);
 	if (ret > 0)
-		return (free_table(table, 0, 0, 1));
+		return (free_table(table));
 	return (table);
 }

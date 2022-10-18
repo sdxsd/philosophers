@@ -98,7 +98,7 @@ void	big_brother(t_table *table)
 			pthread_mutex_lock(table->prnt_lck);
 			table->gedood = TRUE;
 			pthread_mutex_unlock(table->prnt_lck);
-			free_table(table, table->time_of_death, table->deadite, ret);
+			free_table(table);
 			break ;
 		}
 	}
@@ -120,12 +120,12 @@ int	main(int argc, char	*argv[])
 		if (table->eat_count < 1 && argc > 5)
 			return (0);
 		usleep(table->time_to_die * 1000);
-		free_table(table, table->time_to_die, 0, 0);
+		free_table(table);
 		return (0);
 	}
 	if (!init_threads(table->n_philo, table->philo_db, table))
 	{
-		free_table(table, table->time_to_die, 0, 1);
+		free_table(table);
 		return (-1);
 	}
 	big_brother(table);

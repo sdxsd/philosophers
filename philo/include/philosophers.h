@@ -106,7 +106,7 @@ void	acc_usleep(size_t milliseconds);
 
 /* DEALLOCATION FUNCTIONS */
 void	free_philosophers(t_philo **p_db, int n_philo);
-void	*free_table(t_table *t, long todeath, long index, int d);
+void	*free_table(t_table *t);
 void	join_threads(int n_philo, pthread_t *thread_db);
 
 /* UTILITY FUNCTIONS */
