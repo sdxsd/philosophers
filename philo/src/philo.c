@@ -85,6 +85,7 @@ void	*init_philo_fail(t_philo **db, int n_philos)
 {
 	int	iter;
 
+	iter = 0;
 	while (iter < n_philos)
 	{
 		if (db[iter]->r_fork)
@@ -109,7 +110,11 @@ t_philo	*populate_table(t_philo *p1, t_philo **db, int n)
 	{
 		p2 = init_philosopher(p1, NULL, iter);
 		if (!p2)
+		{
+			if (iter == 1)
+				iter++;
 			return (init_philo_fail(db, iter - 1));
+		}
 		else
 			p1->r_philo = p2;
 		p1 = p2;
