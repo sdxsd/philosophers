@@ -46,7 +46,7 @@ A program is free software if users have all of these freedoms.
 void	set_values(t_philo *philo, int index)
 {
 	philo->eat_cnt = 0;
-	philo->state = sleeping;
+	philo->state = SLEEPING;
 	philo->index = index;
 	philo->death = FALSE;
 }

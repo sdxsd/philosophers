@@ -45,9 +45,15 @@ A program is free software if users have all of these freedoms.
 # define FALSE 0
 
 enum e_states {
-	eating,
-	thinking,
-	sleeping,
+	EATING,
+	THINKING,
+	SLEEPING,
+};
+
+enum e_philo_status {
+	CONTINUE,
+	DEATH,
+	SATED,
 };
 
 typedef struct s_philo {

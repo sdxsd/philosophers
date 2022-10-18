@@ -42,27 +42,31 @@ A program is free software if users have all of these freedoms.
 #include <stdio.h>
 #include <unistd.h>
 
-int	check_sated(t_table *table)
+int	check_philo(t_table *table)
 {
 	size_t	iter;
 
 	iter = 0;
-	if (table->eat_count == 0)
-		return (FALSE);
+	pthread_mutex_lock(table->philo_mutex);
 	while (iter < table->n_philo)
 	{
-		pthread_mutex_lock(table->philo_mutex);
 		if (table->philo_db[iter]->eat_cnt > table->eat_count)
 			;
+		else if (time_since(table->philo_db[iter]->hunger, exact_time()) > table->time_to_die)
+		{
+			printf("%ld %ld died\n", time_since(table->epoch, exact_time()), table->philo_db[iter]->index);
+			pthread_mutex_unlock(table->philo_mutex);
+			return (DEATH);
+		}
 		else
 		{
 			pthread_mutex_unlock(table->philo_mutex);
-			return (FALSE);
+			return (CONTINUE);
 		}
-		pthread_mutex_unlock(table->philo_mutex);
 		iter++;
 	}
-	return (TRUE);
+	pthread_mutex_unlock(table->philo_mutex);
+	return (SATED);
 }
 
 /* Big brother is always watching  */
@@ -72,22 +76,19 @@ void	big_brother(t_table *table)
 
 	while (TRUE)
 	{
-		usleep(4096);
-		ret = check_sated(table);
-		pthread_mutex_lock(table->philo_mutex);
-		if (table->gedood || ret)
+		usleep(256);
+		ret = check_philo(table);
+		if (ret == SATED)
 		{
-			if (ret)
-			{
-				pthread_mutex_lock(table->prnt_lck);
-				table->gedood = TRUE;
-				pthread_mutex_unlock(table->prnt_lck);
-			}
-			pthread_mutex_unlock(table->philo_mutex);
+			table->gedood = TRUE;
+			break ;
+		}
+		if (ret == DEATH)
+		{
+			table->gedood = TRUE;
 			free_table(table, table->time_of_death, table->deadite, ret);
 			break ;
 		}
-		pthread_mutex_unlock(table->philo_mutex);
 	}
 }
 
