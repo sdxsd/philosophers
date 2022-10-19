@@ -84,6 +84,7 @@ typedef struct s_table {
 	size_t			time_of_death;
 	size_t			deadite;
 	bool			gedood;
+	bool			eat_limit;
 }	t_table;
 
 /* THREAD FUNCTIONS */

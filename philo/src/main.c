@@ -58,6 +58,20 @@ void	check_death(t_philo *p, t_table *t)
 	pthread_mutex_unlock(t->prnt_lck);
 }
 
+int	death_occurred(t_philo *p, t_table *t)
+{
+	size_t	starvation;
+
+	starvation = time_since(p->hunger, exact_time());
+	if (starvation > t->time_to_die)
+	{
+		printf("%ld %ld has died\n", time_since(t->epoch, exact_time()), p->index + 1);
+		pthread_mutex_unlock(t->philo_mutex);
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
 int	check_philo(t_table *table)
 {
 	size_t	iter;
@@ -68,12 +82,8 @@ int	check_philo(t_table *table)
 	{
 		if (table->philo_db[iter]->eat_cnt > table->eat_count)
 			;
-		else if (time_since(table->philo_db[iter]->hunger, exact_time()) > table->time_to_die)
-		{
-			printf("%ld %ld has died\n", time_since(table->epoch, exact_time()), table->philo_db[iter]->index + 1);
-			pthread_mutex_unlock(table->philo_mutex);
+		else if (death_occurred(table->philo_db[iter], table))
 			return (DEATH);
-		}
 		else
 		{
 			pthread_mutex_unlock(table->philo_mutex);
@@ -82,7 +92,10 @@ int	check_philo(t_table *table)
 		iter++;
 	}
 	pthread_mutex_unlock(table->philo_mutex);
-	return (SATED);
+	if (table->eat_limit)
+		return (SATED);
+	else
+		return (CONTINUE);
 }
 
 /* Big brother is always watching  */
@@ -115,11 +128,13 @@ int	main(int argc, char	*argv[])
 	table = construct_table(argc - 1, argv + 1);
 	if (!table)
 		return (-1);
-	if (table->n_philo < 2 || (table->eat_count == 0 && argc > 5))
+	if (table->n_philo < 2 || (table->eat_count == 0 && table->eat_limit))
 	{
-		if (table->eat_count < 1 && argc > 5)
-			return (0);
-		usleep(table->time_to_die * 1000);
+		if (!(table->eat_count == 0 && table->eat_limit))
+		{
+			usleep(table->time_to_die * 1000);
+			printf("%ld %d has died\n", table->time_to_die, 1);
+		}
 		free_table(table);
 		return (0);
 	}

@@ -50,9 +50,15 @@ void	set_variables(t_table *table, int args, char **argv)
 	table->time_to_eat = ft_atoi(argv[2]);
 	table->time_to_sleep = ft_atoi(argv[3]);
 	if (args > 4)
+	{
+		table->eat_limit = TRUE;
 		table->eat_count = ft_atoi(argv[4]);
+	}
 	else
+	{
+		table->eat_limit = FALSE;
 		table->eat_count = 0;
+	}
 }
 
 t_table	*construct_table(int args, char **argv)
