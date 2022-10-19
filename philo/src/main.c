@@ -81,8 +81,10 @@ int	check_philo(t_table *table)
 	while (iter < table->n_philo)
 	{
 		if (table->philo_db[iter]->eat_cnt > table->eat_count)
+		{
 			;
-		else if (death_occurred(table->philo_db[iter], table))
+		}
+		if (death_occurred(table->philo_db[iter], table))
 			return (DEATH);
 		else
 		{

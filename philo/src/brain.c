@@ -55,6 +55,7 @@ void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 			printf("%ld %ld has taken a fork\n", milsec, index + 1);
 		else
 			printf("%ld %ld is thinking\n", milsec, index + 1);
+		return ;
 	}
 	pthread_mutex_unlock(t->prnt_lck);
 }
@@ -78,20 +79,22 @@ void	philo_sleep(t_philo *philo, t_table *t)
 
 void	philo_eat(t_philo *philo, t_table *t)
 {
-	pthread_mutex_lock(philo->l_fork);
-	print_state(time_since(t->epoch, exact_time()), \
-				TAK_FORK, philo->index, t);
 	pthread_mutex_lock(philo->r_fork);
 	print_state(time_since(t->epoch, exact_time()), \
 				TAK_FORK, philo->index, t);
+	pthread_mutex_lock(philo->l_fork);
+	print_state(time_since(t->epoch, exact_time()), \
+				TAK_FORK, philo->index, t);
 	philo->state = EATING;
+	pthread_mutex_lock(t->philo_mutex);
 	philo->hunger = exact_time();
+	philo->eat_cnt++;
+	pthread_mutex_unlock(t->philo_mutex);
 	print_state(time_since(t->epoch, exact_time()), \
 				philo->state, philo->index, t);
 	acc_usleep(t->time_to_eat);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
-	philo->eat_cnt++;
 }
 
 /* >be philosopher */
@@ -103,7 +106,7 @@ void	*be_philosopher(void *p)
 	philo = (t_philo *)p;
 	table = (t_table *)philo->table;
 	if (philo->index % 2)
-		usleep(128);
+		usleep(1);
 	while (TRUE)
 	{
 		check_death(philo, table);
