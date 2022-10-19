@@ -115,13 +115,13 @@ void	philo_eat(t_philo *philo, t_table *t)
 	print_state(time_since(t->epoch, exact_time()), \
 				TAK_FORK, philo->index, t);
 	philo->state = EATING;
+	print_state(time_since(t->epoch, exact_time()), \
+				philo->state, philo->index, t);
+	acc_usleep(t->time_to_eat);
 	pthread_mutex_lock(philo->self_mutex);
 	philo->hunger = exact_time();
 	philo->eat_cnt++;
 	pthread_mutex_unlock(philo->self_mutex);
-	print_state(time_since(t->epoch, exact_time()), \
-				philo->state, philo->index, t);
-	acc_usleep(t->time_to_eat);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
 }
