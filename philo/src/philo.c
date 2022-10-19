@@ -48,7 +48,6 @@ void	set_values(t_philo *philo, int index)
 	philo->eat_cnt = 0;
 	philo->state = SLEEPING;
 	philo->index = index;
-	philo->death = FALSE;
 }
 
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
@@ -62,6 +61,16 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	set_values(new_philo, index);
 	new_philo->l_philo = l_philo;
 	new_philo->r_philo = r_philo;
+	new_philo->self_mutex = malloc(sizeof(pthread_mutex_t));
+	if (!new_philo)
+		return (NULL);
+	ret = pthread_mutex_init(new_philo->self_mutex, NULL);
+	if (ret > 0)
+	{
+		free(new_philo->self_mutex);
+		free(new_philo);
+		return (NULL);
+	}
 	if (index > 0)
 		new_philo->l_fork = l_philo->r_fork;
 	new_philo->r_fork = malloc(sizeof(pthread_mutex_t));

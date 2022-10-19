@@ -66,13 +66,12 @@ typedef struct s_philo {
 	struct s_philo	*r_philo;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
+	pthread_mutex_t	*self_mutex;
 	void			*table;
-	bool			death;
 }	t_philo;
 
 typedef struct s_table {
 	pthread_mutex_t	*prnt_lck;
-	pthread_mutex_t	*philo_mutex;
 	pthread_t		*threads;
 	t_philo			**philo_db;
 	size_t			n_philo;
@@ -82,7 +81,6 @@ typedef struct s_table {
 	size_t			eat_count;
 	size_t			epoch;
 	size_t			time_of_death;
-	size_t			deadite;
 	bool			gedood;
 	bool			eat_limit;
 }	t_table;

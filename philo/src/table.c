@@ -43,7 +43,6 @@ A program is free software if users have all of these freedoms.
 void	set_variables(t_table *table, int args, char **argv)
 {
 	table->time_of_death = 0;
-	table->deadite = 0;
 	table->gedood = FALSE;
 	table->n_philo = ft_atoi(argv[0]);
 	table->time_to_die = ft_atoi(argv[1]);
