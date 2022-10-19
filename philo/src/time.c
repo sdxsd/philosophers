@@ -70,5 +70,5 @@ void	acc_usleep(size_t milliseconds)
 
 	curr = exact_time();
 	while (exact_time() - curr < milliseconds)
-		usleep(150);
+		usleep(10);
 }
