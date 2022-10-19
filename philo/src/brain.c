@@ -101,13 +101,6 @@ void	take_forks(t_philo *philo, t_table *t)
 
 void	philo_eat(t_philo *philo, t_table *t)
 {
-	pthread_mutex_lock(philo->self_mutex);
-	if (time_since(philo->hunger, exact_time()) > t->time_to_die)
-	{
-		pthread_mutex_unlock(philo->self_mutex);
-		return ;
-	}
-	pthread_mutex_unlock(philo->self_mutex);
 	pthread_mutex_lock(philo->r_fork);
 	print_state(time_since(t->epoch, exact_time()), \
 				TAK_FORK, philo->index, t);
