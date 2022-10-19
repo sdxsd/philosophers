@@ -72,29 +72,25 @@ int	death_occurred(t_philo *p, t_table *t)
 	return (FALSE);
 }
 
-int	check_philo(t_table *table)
+int	check_philo(t_table *t)
 {
-	size_t	iter;
+	int		sated_count;
+	t_philo	*nietzche;
 
-	iter = 0;
-	while (iter < table->n_philo)
+	nietzche = t->philo_db[0];
+	while (nietzche->r_philo)
 	{
-		pthread_mutex_lock(table->philo_db[iter]->self_mutex);
-		if (table->philo_db[iter]->eat_cnt > table->eat_count)
-		{
-			;
-		}
-		if (death_occurred(table->philo_db[iter], table))
-			return (DEATH);
+		pthread_mutex_lock(nietzche->self_mutex);
+		if (nietzche->eat_cnt > t->eat_count)
+			sated_count++;
 		else
-		{
-			pthread_mutex_unlock(table->philo_db[iter]->self_mutex);
-			return (CONTINUE);
-		}
-		pthread_mutex_unlock(table->philo_db[iter]->self_mutex);
-		iter++;
+			sated_count = 0;
+		if (death_occurred(nietzche, t))
+			return (DEATH);
+		pthread_mutex_unlock(nietzche->self_mutex);
+		nietzche = nietzche->r_philo;
 	}
-	if (table->eat_limit)
+	if (t->eat_limit)
 		return (SATED);
 	else
 		return (CONTINUE);

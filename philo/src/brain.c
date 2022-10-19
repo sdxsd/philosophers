@@ -101,6 +101,13 @@ void	take_forks(t_philo *philo, t_table *t)
 
 void	philo_eat(t_philo *philo, t_table *t)
 {
+	pthread_mutex_lock(philo->self_mutex);
+	if (time_since(philo->hunger, exact_time()) > t->time_to_die)
+	{
+		pthread_mutex_unlock(philo->self_mutex);
+		return;
+	}
+	pthread_mutex_unlock(philo->self_mutex);
 	take_forks(philo, t);
 	philo->state = EATING;
 	pthread_mutex_lock(philo->self_mutex);
@@ -126,7 +133,6 @@ void	*be_philosopher(void *p)
 		usleep(128);
 	while (TRUE)
 	{
-		check_death(philo, table);
 		philo_eat(philo, table);
 		philo_sleep(philo, table);
 		philo_think(philo, table);
