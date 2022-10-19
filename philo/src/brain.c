@@ -79,24 +79,24 @@ void	philo_sleep(t_philo *philo, t_table *t)
 
 void	take_forks(t_philo *philo, t_table *t)
 {
-	if (philo->index % 2)
-	{
+	/* if (philo->index % 2) */
+	/* { */
 		pthread_mutex_lock(philo->r_fork);
 		print_state(time_since(t->epoch, exact_time()), \
 					TAK_FORK, philo->index, t);
 		pthread_mutex_lock(philo->l_fork);
 		print_state(time_since(t->epoch, exact_time()), \
 					TAK_FORK, philo->index, t);
-	}
-	else
-	{
-		pthread_mutex_lock(philo->l_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
-		pthread_mutex_lock(philo->r_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
-	}
+	/* } */
+	/* else */
+	/* { */
+		/* pthread_mutex_lock(philo->l_fork); */
+		/* print_state(time_since(t->epoch, exact_time()), \ */
+		/* 			TAK_FORK, philo->index, t); */
+		/* pthread_mutex_lock(philo->r_fork); */
+		/* print_state(time_since(t->epoch, exact_time()), \ */
+		/* 			TAK_FORK, philo->index, t); */
+	/* } */
 }
 
 void	philo_eat(t_philo *philo, t_table *t)
@@ -105,7 +105,7 @@ void	philo_eat(t_philo *philo, t_table *t)
 	if (time_since(philo->hunger, exact_time()) > t->time_to_die)
 	{
 		pthread_mutex_unlock(philo->self_mutex);
-		return;
+		return ;
 	}
 	pthread_mutex_unlock(philo->self_mutex);
 	take_forks(philo, t);
