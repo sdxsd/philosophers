@@ -75,13 +75,9 @@ t_table	*construct_table(int args, char **argv)
 	table->prnt_lck = malloc(sizeof(pthread_mutex_t));
 	if (!table->prnt_lck)
 		return (free_table(table));
-	table->philo_mutex = malloc(sizeof(pthread_mutex_t));
-	if (!table->philo_mutex)
-		return (free_table(table));
 	ret = pthread_mutex_init(table->prnt_lck, NULL);
 	if (ret > 0)
 		return (free_table(table));
-	ret = pthread_mutex_init(table->philo_mutex, NULL);
 	if (ret > 0)
 		return (free_table(table));
 	return (table);

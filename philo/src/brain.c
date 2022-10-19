@@ -77,36 +77,19 @@ void	philo_sleep(t_philo *philo, t_table *t)
 	acc_usleep(t->time_to_sleep);
 }
 
-void	take_forks(t_philo *philo, t_table *t)
-{
-	if (philo->index % 2)
-	{
-		pthread_mutex_lock(philo->r_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
-		pthread_mutex_lock(philo->l_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
-	}
-	else
-	{
-		pthread_mutex_lock(philo->l_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
-		pthread_mutex_lock(philo->r_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
-	}
-}
-
 void	philo_eat(t_philo *philo, t_table *t)
 {
-	take_forks(philo, t);
+	pthread_mutex_lock(philo->r_fork);
+	print_state(time_since(t->epoch, exact_time()), \
+				TAK_FORK, philo->index, t);
+	pthread_mutex_lock(philo->l_fork);
+	print_state(time_since(t->epoch, exact_time()), \
+				TAK_FORK, philo->index, t);
 	philo->state = EATING;
-	pthread_mutex_lock(t->philo_mutex);
+	pthread_mutex_lock(philo->self_mutex);
 	philo->hunger = exact_time();
 	philo->eat_cnt++;
-	pthread_mutex_unlock(t->philo_mutex);
+	pthread_mutex_unlock(philo->self_mutex);
 	print_state(time_since(t->epoch, exact_time()), \
 				philo->state, philo->index, t);
 	acc_usleep(t->time_to_eat);

@@ -66,7 +66,7 @@ int	death_occurred(t_philo *p, t_table *t)
 	if (starvation > t->time_to_die)
 	{
 		printf("%ld %ld has died\n", time_since(t->epoch, exact_time()), p->index + 1);
-		pthread_mutex_unlock(t->philo_mutex);
+		pthread_mutex_unlock(p->self_mutex);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -77,9 +77,9 @@ int	check_philo(t_table *table)
 	size_t	iter;
 
 	iter = 0;
-	pthread_mutex_lock(table->philo_mutex);
 	while (iter < table->n_philo)
 	{
+		pthread_mutex_lock(table->philo_db[iter]->self_mutex);
 		if (table->philo_db[iter]->eat_cnt > table->eat_count)
 		{
 			;
@@ -88,12 +88,12 @@ int	check_philo(t_table *table)
 			return (DEATH);
 		else
 		{
-			pthread_mutex_unlock(table->philo_mutex);
+			pthread_mutex_unlock(table->philo_db[iter]->self_mutex);
 			return (CONTINUE);
 		}
+		pthread_mutex_unlock(table->philo_db[iter]->self_mutex);
 		iter++;
 	}
-	pthread_mutex_unlock(table->philo_mutex);
 	if (table->eat_limit)
 		return (SATED);
 	else
