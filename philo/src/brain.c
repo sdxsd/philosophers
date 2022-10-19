@@ -90,10 +90,10 @@ void	take_forks(t_philo *philo, t_table *t)
 	}
 	else
 	{
-		pthread_mutex_lock(philo->r_fork);
+		pthread_mutex_lock(philo->l_fork);
 		print_state(time_since(t->epoch, exact_time()), \
 					TAK_FORK, philo->index, t);
-		pthread_mutex_lock(philo->l_fork);
+		pthread_mutex_lock(philo->r_fork);
 		print_state(time_since(t->epoch, exact_time()), \
 					TAK_FORK, philo->index, t);
 	}
