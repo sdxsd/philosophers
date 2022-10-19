@@ -74,7 +74,7 @@ int	death_occurred(t_philo *p, t_table *t)
 
 int	check_philo(t_table *t)
 {
-	int		sated_count;
+	size_t	sated_count;
 	t_philo	*nietzche;
 
 	nietzche = t->philo_db[0];
@@ -89,6 +89,8 @@ int	check_philo(t_table *t)
 			return (DEATH);
 		pthread_mutex_unlock(nietzche->self_mutex);
 		nietzche = nietzche->r_philo;
+		if (sated_count == t->n_philo)
+			break ;
 	}
 	if (t->eat_limit)
 		return (SATED);
