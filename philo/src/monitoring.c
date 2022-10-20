@@ -102,13 +102,6 @@ void	big_brother(t_table *table)
 void	check_death(t_philo *p, t_table *t)
 {
 	pthread_mutex_lock(&t->tbl_lck);
-	if (ts(p->t_since_meal, exact_time()) > t->time_to_die)
-	{
-		printf("I %ld died at %ld\n", p->idx, ts(t->epoch, exact_time()));
-		printf("My hunger was %ld\n", ts(p->t_since_meal, exact_time()));
-		pthread_exit(0);
-	}
-	else
 	if (t->death)
 	{
 		pthread_mutex_unlock(&t->tbl_lck);
