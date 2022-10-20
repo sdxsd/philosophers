@@ -96,6 +96,9 @@ void	ps(size_t milsec, size_t state, size_t index, t_table *t);
 void	*be_philosopher(void *p);
 void	check_death(t_philo *p, t_table *t);
 
+/* MONITORING FUNCTIONS */
+void	big_brother(t_table *table);
+
 /* TIME FUNCTIONS */
 size_t	exact_time(void);
 size_t	ts(size_t epoch, size_t current);

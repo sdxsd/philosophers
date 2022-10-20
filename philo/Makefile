@@ -5,7 +5,7 @@
 # @version 0.1
 
 CC = gcc
-CFLAGS = -g -Wall -Wextra -Werror -pthread
+CFLAGS = -g -Wall -Wextra -Werror -pthread -fsanitize=thread
 NAME = philo
 CFILES = \
 		src/main.c \
@@ -15,6 +15,7 @@ CFILES = \
 		src/utils.c \
 		src/parse.c \
 		src/free.c \
+		src/monitoring.c \
 		src/philo.c
 OFILES = $(CFILES:.c=.o)
 

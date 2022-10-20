@@ -38,32 +38,79 @@ A program is free software if users have all of these freedoms.
 */
 
 #include "../include/philosophers.h"
-#include <stdlib.h>
 #include <stdio.h>
 
-void	free_philosophers(t_philo **p_db, int n_philo)
+static int	death_occurred(t_philo *p, t_table *t)
 {
-	int	iter;
+	size_t	starvation;
 
-	iter = 0;
-	while (iter < n_philo)
+	starvation = ts(p->t_since_meal, exact_time());
+	if (starvation >= t->time_to_die)
 	{
-		pthread_mutex_destroy(&p_db[iter]->self_lck);
-		pthread_mutex_destroy(p_db[iter]->l_fork);
-		free(p_db[iter]);
-		iter++;
+		printf("%ld %ld has died\n", ts(t->epoch, exact_time()), p->idx + 1);
+		pthread_mutex_unlock(&p->self_lck);
+		return (TRUE);
 	}
-	free(p_db);
+	return (FALSE);
 }
 
-void	*free_table(t_table *t)
+static int	check_philo(t_table *t)
 {
-	if (t->threads)
-		join_threads(t->n_philo, t->threads);
-	if (t->threads)
-		free(t->threads);
-	if (t->philo_db)
-		free_philosophers(t->philo_db, t->n_philo);
-	pthread_mutex_destroy(&t->tbl_lck);
-	return (NULL);
+	size_t	sated_count;
+	t_philo	*nietzche;
+
+	nietzche = t->philo_db[0];
+	while (nietzche->r_philo)
+	{
+		pthread_mutex_lock(&nietzche->self_lck);
+		if (nietzche->t_eaten > t->p_to_eat)
+			sated_count++;
+		else
+			sated_count = 0;
+		if (death_occurred(nietzche, t))
+			return (DEATH);
+		pthread_mutex_unlock(&nietzche->self_lck);
+		nietzche = nietzche->r_philo;
+		if (sated_count == t->n_philo)
+			break ;
+	}
+	if (t->meal_limit)
+		return (SATED);
+	else
+		return (CONTINUE);
+}
+
+/* Big brother is always watching  */
+void	big_brother(t_table *table)
+{
+	int		ret;
+
+	while (TRUE)
+	{
+		ret = check_philo(table);
+		if (ret == SATED || ret == DEATH)
+		{
+			pthread_mutex_lock(&table->tbl_lck);
+			table->death = TRUE;
+			pthread_mutex_unlock(&table->tbl_lck);
+			free_table(table);
+			break ;
+		}
+	}
+}
+
+void	check_death(t_philo *p, t_table *t)
+{
+	pthread_mutex_lock(&t->tbl_lck);
+	if (t->death)
+	{
+		pthread_mutex_unlock(&t->tbl_lck);
+		if (p->state == EATING)
+		{
+			pthread_mutex_unlock(p->l_fork);
+			pthread_mutex_unlock(&p->r_fork);
+		}
+		pthread_exit(0);
+	}
+	pthread_mutex_unlock(&t->tbl_lck);
 }
