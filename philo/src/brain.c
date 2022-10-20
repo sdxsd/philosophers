@@ -41,7 +41,8 @@ A program is free software if users have all of these freedoms.
 #include <unistd.h>
 #include <stdio.h>
 
-void	ps(size_t milsec, size_t state, size_t index, t_table *t)
+/* Short for: PRINT INTERNAL STATE STATUS */
+void	piss(size_t milsec, size_t state, size_t index, t_table *t)
 {
 	pthread_mutex_lock(&t->tbl_lck);
 	if (!t->death)
@@ -61,14 +62,14 @@ void	ps(size_t milsec, size_t state, size_t index, t_table *t)
 void	philo_think(t_philo *philo, t_table *t)
 {
 	philo->state = THINKING;
-	ps(ts(t->epoch, exact_time()), philo->state, philo->idx, t);
+	piss(ts(t->epoch, exact_time()), philo->state, philo->idx, t);
 	check_death(philo, t);
 }
 
 void	philo_sleep(t_philo *philo, t_table *t)
 {
 	philo->state = SLEEPING;
-	ps(ts(t->epoch, exact_time()), philo->state, philo->idx, t);
+	piss(ts(t->epoch, exact_time()), philo->state, philo->idx, t);
 	check_death(philo, t);
 	acc_usleep(philo, t,t->time_to_sleep);
 }
@@ -76,11 +77,11 @@ void	philo_sleep(t_philo *philo, t_table *t)
 void	philo_eat(t_philo *philo, t_table *t)
 {
 	pthread_mutex_lock(&philo->r_fork);
-	ps(ts(t->epoch, exact_time()), TKE_FORK, philo->idx, t);
+	piss(ts(t->epoch, exact_time()), TKE_FORK, philo->idx, t);
 	pthread_mutex_lock(philo->l_fork);
-	ps(ts(t->epoch, exact_time()), TKE_FORK, philo->idx, t);
+	piss(ts(t->epoch, exact_time()), TKE_FORK, philo->idx, t);
 	philo->state = EATING;
-	ps(ts(t->epoch, exact_time()), philo->state, philo->idx, t);
+	piss(ts(t->epoch, exact_time()), philo->state, philo->idx, t);
 	acc_usleep(philo, t, t->time_to_eat);
 	pthread_mutex_lock(&philo->self_lck);
 	philo->t_since_meal = exact_time();
