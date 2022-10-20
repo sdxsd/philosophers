@@ -15,7 +15,6 @@ CFILES = \
 		src/utils.c \
 		src/parse.c \
 		src/free.c \
-		src/table.c \
 		src/philo.c
 OFILES = $(CFILES:.c=.o)
 

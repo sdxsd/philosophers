@@ -43,21 +43,21 @@ A program is free software if users have all of these freedoms.
 
 void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 {
-	pthread_mutex_lock(t->prnt_lck);
-	if (!t->gedood)
+	pthread_mutex_lock(&t->tbl_lck);
+	if (!t->death)
 	{
-		pthread_mutex_unlock(t->prnt_lck);
+		pthread_mutex_unlock(&t->tbl_lck);
 		if (state == SLEEPING)
 			printf("%ld %ld is sleeping\n", milsec, index + 1);
 		else if (state == EATING)
 			printf("%ld %ld is eating\n", milsec, index + 1);
-		else if (state == TAK_FORK)
+		else if (state == TKE_FORK)
 			printf("%ld %ld has taken a fork\n", milsec, index + 1);
 		else
 			printf("%ld %ld is thinking\n", milsec, index + 1);
 		return ;
 	}
-	pthread_mutex_unlock(t->prnt_lck);
+	pthread_mutex_unlock(&t->tbl_lck);
 }
 
 void	philo_think(t_philo *philo, t_table *t)
@@ -81,42 +81,42 @@ void	take_forks(t_philo *philo, t_table *t)
 {
 	if (philo->index % 2)
 	{
-		pthread_mutex_lock(philo->r_fork);
+		pthread_mutex_lock(&philo->r_fork);
 		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
+					TKE_FORK, philo->index, t);
 		pthread_mutex_lock(philo->l_fork);
 		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
+					TKE_FORK, philo->index, t);
 	}
 	else
 	{
 		pthread_mutex_lock(philo->l_fork);
 		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
-		pthread_mutex_lock(philo->r_fork);
+					TKE_FORK, philo->index, t);
+		pthread_mutex_lock(&philo->r_fork);
 		print_state(time_since(t->epoch, exact_time()), \
-					TAK_FORK, philo->index, t);
+					TKE_FORK, philo->index, t);
 	}
 }
 
 void	philo_eat(t_philo *philo, t_table *t)
 {
-	pthread_mutex_lock(philo->r_fork);
+	pthread_mutex_lock(&philo->r_fork);
 	print_state(time_since(t->epoch, exact_time()), \
-				TAK_FORK, philo->index, t);
+				TKE_FORK, philo->index, t);
 	pthread_mutex_lock(philo->l_fork);
 	print_state(time_since(t->epoch, exact_time()), \
-				TAK_FORK, philo->index, t);
+				TKE_FORK, philo->index, t);
 	philo->state = EATING;
 	print_state(time_since(t->epoch, exact_time()), \
 				philo->state, philo->index, t);
 	acc_usleep(t->time_to_eat);
-	pthread_mutex_lock(philo->self_mutex);
-	philo->hunger = exact_time();
-	philo->eat_cnt++;
-	pthread_mutex_unlock(philo->self_mutex);
+	pthread_mutex_lock(&philo->self_lck);
+	philo->t_since_meal = exact_time();
+	philo->t_eaten++;
+	pthread_mutex_unlock(&philo->self_lck);
 	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(&philo->r_fork);
 }
 
 /* >be philosopher */

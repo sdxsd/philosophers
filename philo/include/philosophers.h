@@ -43,12 +43,14 @@ A program is free software if users have all of these freedoms.
 # include <stdbool.h>
 # define TRUE 1
 # define FALSE 0
+# define SUCCESS 1
+# define FAILURE 0
 
 enum e_states {
 	EATING,
 	THINKING,
 	SLEEPING,
-	TAK_FORK,
+	TKE_FORK,
 };
 
 enum e_philo_status {
@@ -58,31 +60,30 @@ enum e_philo_status {
 };
 
 typedef struct s_philo {
-	size_t			eat_cnt;
-	size_t			state;
-	size_t			index;
-	size_t			hunger;
 	struct s_philo	*l_philo;
 	struct s_philo	*r_philo;
+	size_t			t_eaten;
+	size_t			t_since_meal;
+	size_t			state;
+	size_t			index;
 	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*r_fork;
-	pthread_mutex_t	*self_mutex;
+	pthread_mutex_t	r_fork;
+	pthread_mutex_t	self_lck;
 	void			*table;
 }	t_philo;
 
 typedef struct s_table {
-	pthread_mutex_t	*prnt_lck;
+	pthread_mutex_t	tbl_lck;
 	pthread_t		*threads;
 	t_philo			**philo_db;
+	size_t			epoch;
 	size_t			n_philo;
 	size_t			time_to_die;
 	size_t			time_to_sleep;
 	size_t			time_to_eat;
-	size_t			eat_count;
-	size_t			epoch;
-	size_t			time_of_death;
-	bool			gedood;
-	bool			eat_limit;
+	size_t			p_to_eat;
+	bool			meal_limit;
+	bool			death;
 }	t_table;
 
 /* THREAD FUNCTIONS */
@@ -91,15 +92,12 @@ int		init_threads(int n_philo, t_philo **p_db, t_table *t);
 /* PHILOSOPHER FUNCTIONS */
 t_philo	**init_philosophers(int n_philos);
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);
-t_philo	**lonely_philo(void);
 void	print_state(size_t milsec, size_t state, size_t index, t_table *t);
 void	*be_philosopher(void *p);
 void	check_death(t_philo *p, t_table *t);
 
 /* TIME FUNCTIONS */
 size_t	exact_time(void);
-size_t	sec_to_mil(size_t seconds);
-size_t	mic_to_mil(size_t mic_seconds);
 size_t	time_since(size_t epoch, size_t current);
 void	acc_usleep(size_t milliseconds);
 
@@ -114,6 +112,6 @@ int		chk_string(char *string);
 int		chk_args(char **args);
 
 /* TABLE CONSTRUCTION FUNCTIONS */
-t_table	*construct_table(int args, char **argv);
+int		construct_table(t_table *table, int args, char **argv);
 
 #endif // PHILOSOPHERS_H

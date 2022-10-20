@@ -45,10 +45,10 @@ A program is free software if users have all of these freedoms.
 
 void	set_values(t_philo *philo, int index)
 {
-	philo->eat_cnt = 0;
+	philo->t_eaten = 0;
 	philo->state = SLEEPING;
 	philo->index = index;
-	philo->hunger = 0;
+	philo->t_since_meal = 0;
 }
 
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
@@ -62,28 +62,20 @@ t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	set_values(new_philo, index);
 	new_philo->l_philo = l_philo;
 	new_philo->r_philo = r_philo;
-	new_philo->self_mutex = malloc(sizeof(pthread_mutex_t));
 	if (!new_philo)
 		return (NULL);
-	ret = pthread_mutex_init(new_philo->self_mutex, NULL);
-	if (ret > 0)
-	{
-		free(new_philo->self_mutex);
-		free(new_philo);
-		return (NULL);
-	}
 	if (index > 0)
-		new_philo->l_fork = l_philo->r_fork;
-	new_philo->r_fork = malloc(sizeof(pthread_mutex_t));
-	if (!new_philo->r_fork)
+		new_philo->l_fork = l_&philo->r_fork;
+	new_&philo->r_fork = malloc(sizeof(pthread_mutex_t));
+	if (!new_&philo->r_fork)
 	{
 		free(new_philo);
 		return (NULL);
 	}
-	ret = pthread_mutex_init(new_philo->r_fork, NULL);
+	ret = pthread_mutex_init(new_&philo->r_fork, NULL);
 	if (ret > 0)
 	{
-		free(new_philo->r_fork);
+		free(new_&philo->r_fork);
 		free(new_philo);
 		return (NULL);
 	}

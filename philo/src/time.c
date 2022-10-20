@@ -41,12 +41,12 @@ A program is free software if users have all of these freedoms.
 #include <sys/time.h>
 #include <unistd.h>
 
-size_t	sec_to_mil(size_t seconds)
+static size_t	sec_to_mil(size_t seconds)
 {
 	return (seconds * 1000);
 }
 
-size_t	mic_to_mil(size_t mic_seconds)
+static size_t	mic_to_mil(size_t mic_seconds)
 {
 	return (mic_seconds / 1000);
 }

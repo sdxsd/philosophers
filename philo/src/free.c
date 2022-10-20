@@ -48,7 +48,7 @@ void	free_philosophers(t_philo **p_db, int n_philo)
 	iter = 0;
 	while (iter < n_philo)
 	{
-		pthread_mutex_destroy(p_db[iter]->self_mutex);
+		pthread_mutex_destroy(&p_db[iter]->self_lck);
 		pthread_mutex_destroy(p_db[iter]->l_fork);
 		free(p_db[iter]->l_fork);
 		free(p_db[iter]);
@@ -65,11 +65,7 @@ void	*free_table(t_table *t)
 		free(t->threads);
 	if (t->philo_db)
 		free_philosophers(t->philo_db, t->n_philo);
-	if (t->prnt_lck)
-	{
-		pthread_mutex_destroy(t->prnt_lck);
-		free(t->prnt_lck);
-	}
+	pthread_mutex_destroy(&t->tbl_lck);
 	free(t);
 	return (NULL);
 }

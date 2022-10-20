@@ -44,29 +44,29 @@ A program is free software if users have all of these freedoms.
 
 void	check_death(t_philo *p, t_table *t)
 {
-	pthread_mutex_lock(t->prnt_lck);
-	if (t->gedood)
+	pthread_mutex_lock(&t->tbl_lck);
+	if (t->death)
 	{
-		pthread_mutex_unlock(t->prnt_lck);
+		pthread_mutex_unlock(&t->tbl_lck);
 		if (p->state == EATING)
 		{
 			pthread_mutex_unlock(p->l_fork);
-			pthread_mutex_unlock(p->r_fork);
+			pthread_mutex_unlock(&p->r_fork);
 		}
 		pthread_exit(0);
 	}
-	pthread_mutex_unlock(t->prnt_lck);
+	pthread_mutex_unlock(&t->tbl_lck);
 }
 
 int	death_occurred(t_philo *p, t_table *t)
 {
 	size_t	starvation;
 
-	starvation = time_since(p->hunger, exact_time());
+	starvation = time_since(p->t_since_meal, exact_time());
 	if (starvation > t->time_to_die)
 	{
 		printf("%ld %ld has died\n", time_since(t->epoch, exact_time()), p->index + 1);
-		pthread_mutex_unlock(p->self_mutex);
+		pthread_mutex_unlock(&p->self_lck);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -80,19 +80,19 @@ int	check_philo(t_table *t)
 	nietzche = t->philo_db[0];
 	while (nietzche->r_philo)
 	{
-		pthread_mutex_lock(nietzche->self_mutex);
-		if (nietzche->eat_cnt > t->eat_count)
+		pthread_mutex_lock(&nietzche->self_lck);
+		if (nietzche->t_eaten > t->p_to_eat)
 			sated_count++;
 		else
 			sated_count = 0;
 		if (death_occurred(nietzche, t))
 			return (DEATH);
-		pthread_mutex_unlock(nietzche->self_mutex);
+		pthread_mutex_unlock(&nietzche->self_lck);
 		nietzche = nietzche->r_philo;
 		if (sated_count == t->n_philo)
 			break ;
 	}
-	if (t->eat_limit)
+	if (t->meal_limit)
 		return (SATED);
 	else
 		return (CONTINUE);
@@ -108,41 +108,56 @@ void	big_brother(t_table *table)
 		ret = check_philo(table);
 		if (ret == SATED || ret == DEATH)
 		{
-			pthread_mutex_lock(table->prnt_lck);
-			table->gedood = TRUE;
-			pthread_mutex_unlock(table->prnt_lck);
+			pthread_mutex_lock(&table->tbl_lck);
+			table->death= TRUE;
+			pthread_mutex_unlock(&table->tbl_lck);
 			free_table(table);
 			break ;
 		}
 	}
 }
 
-int	main(int argc, char	*argv[])
+int	construct_table(t_table *table, int args, char **argv)
 {
-	t_table	*table;
-
-	if (argc > 6 || argc < 5)
-		return (0);
+	if (args > 6 || args < 5)
+		exit (0);
 	if (!chk_args(argv + 1))
-		return (0);
-	table = construct_table(argc - 1, argv + 1);
-	if (!table)
-		return (-1);
-	if (table->n_philo < 2 || (table->eat_count == 0 && table->eat_limit))
+		exit (0);
+	table->death = FALSE;
+	table->n_philo = ft_atoi(argv[0]);
+	table->time_to_die = ft_atoi(argv[1]);
+	table->time_to_eat = ft_atoi(argv[2]);
+	table->time_to_sleep = ft_atoi(argv[3]);
+	table->meal_limit = args - 3;
+	if (args)
+		table->p_to_eat = ft_atoi(argv[4]);
+	else
+		table->p_to_eat = 0;
+	if (table->n_philo < 2 || (table->p_to_eat == 0 && table->meal_limit))
 	{
-		if (!(table->eat_count == 0 && table->eat_limit))
+		if (!(table->p_to_eat == 0 && table->meal_limit))
 		{
 			usleep(table->time_to_die * 1000);
 			printf("%ld %d has died\n", table->time_to_die, 1);
 		}
-		free_table(table);
-		return (0);
+		return (FAILURE);
 	}
-	if (!init_threads(table->n_philo, table->philo_db, table))
+	return (SUCCESS);
+}
+
+int	main(int argc, char	*argv[])
+{
+	t_table	table;
+
+	construct_table(&table, argc - 1, argv + 1);
+	table.philo_db = init_philosophers(table.n_philo);
+	if (!table.philo_db && table.n_philo > 2)
+		return (FAILURE);
+	if (!init_threads(table.n_philo, table.philo_db, &table))
 	{
-		free_table(table);
+		free_table(&table);
 		return (-1);
 	}
-	big_brother(table);
+	big_brother(&table);
 	return (0);
 }
