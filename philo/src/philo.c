@@ -47,61 +47,37 @@ void	set_values(t_philo *philo, int index)
 {
 	philo->t_eaten = 0;
 	philo->state = SLEEPING;
-	philo->index = index;
+	philo->idx = index;
 	philo->t_since_meal = 0;
 }
 
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 {
 	t_philo	*new_philo;
-	int		ret;
 
 	new_philo = malloc(sizeof(t_philo));
 	if (!new_philo)
 		return (NULL);
 	set_values(new_philo, index);
+	if (pthread_mutex_init(&new_philo->self_lck, NULL) > 0)
+	{
+		free(new_philo);
+		return (NULL);
+	}
+	if (pthread_mutex_init(&new_philo->r_fork, NULL) > 0)
+	{
+		pthread_mutex_destroy(&new_philo->self_lck);
+		free(new_philo);
+		return (NULL);
+	}
 	new_philo->l_philo = l_philo;
 	new_philo->r_philo = r_philo;
-	if (!new_philo)
-		return (NULL);
 	if (index > 0)
-		new_philo->l_fork = l_&philo->r_fork;
-	new_&philo->r_fork = malloc(sizeof(pthread_mutex_t));
-	if (!new_&philo->r_fork)
-	{
-		free(new_philo);
-		return (NULL);
-	}
-	ret = pthread_mutex_init(new_&philo->r_fork, NULL);
-	if (ret > 0)
-	{
-		free(new_&philo->r_fork);
-		free(new_philo);
-		return (NULL);
-	}
+		new_philo->l_fork = &l_philo->r_fork;
 	return (new_philo);
 }
 
-void	*init_philo_fail(t_philo **db, int n_philos)
-{
-	int	iter;
-
-	iter = 0;
-	while (iter < n_philos)
-	{
-		if (db[iter]->r_fork)
-		{
-			pthread_mutex_destroy(db[iter]->r_fork);
-			free(db[iter]->r_fork);
-		}
-		free(db[iter]);
-		iter++;
-	}
-	free(db);
-	return (NULL);
-}
-
-t_philo	*populate_table(t_philo *p1, t_philo **db, int n)
+static t_philo	*populate_table(t_philo *ip, t_philo *p1, t_philo **db, int n)
 {
 	t_philo	*p2;
 	int		iter;
@@ -112,9 +88,9 @@ t_philo	*populate_table(t_philo *p1, t_philo **db, int n)
 		p2 = init_philosopher(p1, NULL, iter);
 		if (!p2)
 		{
-			if (iter == 1)
-				iter++;
-			return (init_philo_fail(db, iter - 1));
+			while (iter-- >= 0)
+				free(db[iter]);
+			return (NULL);
 		}
 		else
 			p1->r_philo = p2;
@@ -122,33 +98,34 @@ t_philo	*populate_table(t_philo *p1, t_philo **db, int n)
 		db[iter] = p1;
 		iter++;
 	}
+	p1->r_philo = ip;
+	ip->l_philo = p1;
+	ip->l_fork = &p1->r_fork;
 	return (p1);
 }
 
 t_philo	**init_philosophers(int n_philos)
 {
 	t_philo	**philosophers_db;
-	t_philo	*initial_philo;
-	t_philo	*philo_1;
+	t_philo	*ip;
+	t_philo	*last_philo;
 
-	if (n_philos < 2)
-		return (NULL);
 	philosophers_db = malloc(sizeof(t_philo *) * n_philos);
 	if (!philosophers_db)
 		return (NULL);
-	initial_philo = init_philosopher(NULL, NULL, 0);
-	if (!initial_philo)
+	ip = init_philosopher(NULL, NULL, 0);
+	if (!ip)
 	{
 		free(philosophers_db);
 		return (NULL);
 	}
-	philo_1 = initial_philo;
-	philosophers_db[0] = initial_philo;
-	philo_1 = populate_table(philo_1, philosophers_db, n_philos);
-	if (!philo_1)
+	philosophers_db[0] = ip;
+	last_philo = populate_table(ip, ip, philosophers_db, n_philos);
+	if (!last_philo)
+	{
+		free(philosophers_db);
+		free(ip);
 		return (NULL);
-	philo_1->r_philo = initial_philo;
-	initial_philo->l_philo = philo_1;
-	initial_philo->l_fork = philo_1->r_fork;
+	}
 	return (philosophers_db);
 }

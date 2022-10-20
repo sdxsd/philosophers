@@ -59,7 +59,7 @@ size_t	exact_time(void)
 	return (sec_to_mil(time.tv_sec) + mic_to_mil(time.tv_usec));
 }
 
-size_t	time_since(size_t epoch, size_t current)
+size_t	ts(size_t epoch, size_t current)
 {
 	return ((current - epoch));
 }

@@ -41,7 +41,7 @@ A program is free software if users have all of these freedoms.
 #include <unistd.h>
 #include <stdio.h>
 
-void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
+void	ps(size_t milsec, size_t state, size_t index, t_table *t)
 {
 	pthread_mutex_lock(&t->tbl_lck);
 	if (!t->death)
@@ -63,53 +63,31 @@ void	print_state(size_t milsec, size_t state, size_t index, t_table *t)
 void	philo_think(t_philo *philo, t_table *t)
 {
 	philo->state = THINKING;
-	print_state(time_since(t->epoch, exact_time()), \
-				philo->state, philo->index, t);
+	ps(ts(t->epoch, exact_time()), \
+				philo->state, philo->idx, t);
 	check_death(philo, t);
 }
 
 void	philo_sleep(t_philo *philo, t_table *t)
 {
 	philo->state = SLEEPING;
-	print_state(time_since(t->epoch, exact_time()), \
-				philo->state, philo->index, t);
+	ps(ts(t->epoch, exact_time()), \
+				philo->state, philo->idx, t);
 	check_death(philo, t);
 	acc_usleep(t->time_to_sleep);
-}
-
-void	take_forks(t_philo *philo, t_table *t)
-{
-	if (philo->index % 2)
-	{
-		pthread_mutex_lock(&philo->r_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TKE_FORK, philo->index, t);
-		pthread_mutex_lock(philo->l_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TKE_FORK, philo->index, t);
-	}
-	else
-	{
-		pthread_mutex_lock(philo->l_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TKE_FORK, philo->index, t);
-		pthread_mutex_lock(&philo->r_fork);
-		print_state(time_since(t->epoch, exact_time()), \
-					TKE_FORK, philo->index, t);
-	}
 }
 
 void	philo_eat(t_philo *philo, t_table *t)
 {
 	pthread_mutex_lock(&philo->r_fork);
-	print_state(time_since(t->epoch, exact_time()), \
-				TKE_FORK, philo->index, t);
+	ps(ts(t->epoch, exact_time()), \
+				TKE_FORK, philo->idx, t);
 	pthread_mutex_lock(philo->l_fork);
-	print_state(time_since(t->epoch, exact_time()), \
-				TKE_FORK, philo->index, t);
+	ps(ts(t->epoch, exact_time()), \
+				TKE_FORK, philo->idx, t);
 	philo->state = EATING;
-	print_state(time_since(t->epoch, exact_time()), \
-				philo->state, philo->index, t);
+	ps(ts(t->epoch, exact_time()), \
+				philo->state, philo->idx, t);
 	acc_usleep(t->time_to_eat);
 	pthread_mutex_lock(&philo->self_lck);
 	philo->t_since_meal = exact_time();
@@ -127,7 +105,7 @@ void	*be_philosopher(void *p)
 
 	philo = (t_philo *)p;
 	table = (t_table *)philo->table;
-	if (philo->index % 2)
+	if (philo->idx % 2)
 		usleep(128);
 	while (TRUE)
 	{

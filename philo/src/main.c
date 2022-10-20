@@ -62,10 +62,10 @@ int	death_occurred(t_philo *p, t_table *t)
 {
 	size_t	starvation;
 
-	starvation = time_since(p->t_since_meal, exact_time());
-	if (starvation > t->time_to_die)
+	starvation = ts(p->t_since_meal, exact_time());
+	if (starvation >= t->time_to_die)
 	{
-		printf("%ld %ld has died\n", time_since(t->epoch, exact_time()), p->index + 1);
+		printf("%ld %ld has died\n", ts(t->epoch, exact_time()), p->idx + 1);
 		pthread_mutex_unlock(&p->self_lck);
 		return (TRUE);
 	}
@@ -109,7 +109,7 @@ void	big_brother(t_table *table)
 		if (ret == SATED || ret == DEATH)
 		{
 			pthread_mutex_lock(&table->tbl_lck);
-			table->death= TRUE;
+			table->death = TRUE;
 			pthread_mutex_unlock(&table->tbl_lck);
 			free_table(table);
 			break ;
@@ -120,17 +120,17 @@ void	big_brother(t_table *table)
 int	construct_table(t_table *table, int args, char **argv)
 {
 	if (args > 6 || args < 5)
-		exit (0);
+		return (FAILURE);
 	if (!chk_args(argv + 1))
-		exit (0);
+		return (FAILURE);
 	table->death = FALSE;
-	table->n_philo = ft_atoi(argv[0]);
-	table->time_to_die = ft_atoi(argv[1]);
-	table->time_to_eat = ft_atoi(argv[2]);
-	table->time_to_sleep = ft_atoi(argv[3]);
-	table->meal_limit = args - 3;
-	if (args)
-		table->p_to_eat = ft_atoi(argv[4]);
+	table->n_philo = ft_atoi(argv[1]);
+	table->time_to_die = ft_atoi(argv[2]);
+	table->time_to_eat = ft_atoi(argv[3]);
+	table->time_to_sleep = ft_atoi(argv[4]);
+	table->meal_limit = args - 5;
+	if (table->meal_limit)
+		table->p_to_eat = ft_atoi(argv[5]);
 	else
 		table->p_to_eat = 0;
 	if (table->n_philo < 2 || (table->p_to_eat == 0 && table->meal_limit))
@@ -149,7 +149,7 @@ int	main(int argc, char	*argv[])
 {
 	t_table	table;
 
-	construct_table(&table, argc - 1, argv + 1);
+	construct_table(&table, argc, argv);
 	table.philo_db = init_philosophers(table.n_philo);
 	if (!table.philo_db && table.n_philo > 2)
 		return (FAILURE);

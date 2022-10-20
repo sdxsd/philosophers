@@ -65,7 +65,7 @@ typedef struct s_philo {
 	size_t			t_eaten;
 	size_t			t_since_meal;
 	size_t			state;
-	size_t			index;
+	size_t			idx;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	r_fork;
 	pthread_mutex_t	self_lck;
@@ -82,7 +82,7 @@ typedef struct s_table {
 	size_t			time_to_sleep;
 	size_t			time_to_eat;
 	size_t			p_to_eat;
-	bool			meal_limit;
+	int				meal_limit;
 	bool			death;
 }	t_table;
 
@@ -92,13 +92,13 @@ int		init_threads(int n_philo, t_philo **p_db, t_table *t);
 /* PHILOSOPHER FUNCTIONS */
 t_philo	**init_philosophers(int n_philos);
 t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);
-void	print_state(size_t milsec, size_t state, size_t index, t_table *t);
+void	ps(size_t milsec, size_t state, size_t index, t_table *t);
 void	*be_philosopher(void *p);
 void	check_death(t_philo *p, t_table *t);
 
 /* TIME FUNCTIONS */
 size_t	exact_time(void);
-size_t	time_since(size_t epoch, size_t current);
+size_t	ts(size_t epoch, size_t current);
 void	acc_usleep(size_t milliseconds);
 
 /* DEALLOCATION FUNCTIONS */
