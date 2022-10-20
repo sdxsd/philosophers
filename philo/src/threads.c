@@ -67,7 +67,6 @@ int	init_threads(int n_philo, t_philo **p_db, t_table *t)
 	t->epoch = exact_time();
 	while (iter < n_philo)
 	{
-		usleep(8);
 		p_db[iter]->table = t;
 		p_db[iter]->t_since_meal = t->epoch;
 		ret = pthread_create(&t->threads[iter], NULL, \
