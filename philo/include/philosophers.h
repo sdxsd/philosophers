@@ -102,7 +102,7 @@ void	big_brother(t_table *table);
 /* TIME FUNCTIONS */
 size_t	exact_time(void);
 size_t	ts(size_t epoch, size_t current);
-void	acc_usleep(size_t milliseconds);
+void	acc_usleep(t_philo *p, t_table *t, size_t milliseconds);
 
 /* DEALLOCATION FUNCTIONS */
 void	free_philosophers(t_philo **p_db, int n_philo);

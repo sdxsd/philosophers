@@ -64,11 +64,14 @@ size_t	ts(size_t epoch, size_t current)
 	return ((current - epoch));
 }
 
-void	acc_usleep(size_t milliseconds)
+void	acc_usleep(t_philo *p, t_table *t, size_t milliseconds)
 {
 	size_t	curr;
 
 	curr = exact_time();
 	while (exact_time() - curr < milliseconds)
-		usleep(10);
+	{
+		check_death(p, t);
+		usleep(100);
+	}
 }
