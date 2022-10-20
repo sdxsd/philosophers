@@ -46,7 +46,6 @@ void	ps(size_t milsec, size_t state, size_t index, t_table *t)
 	pthread_mutex_lock(&t->tbl_lck);
 	if (!t->death)
 	{
-		pthread_mutex_unlock(&t->tbl_lck);
 		if (state == SLEEPING)
 			printf("%ld %ld is sleeping\n", milsec, index + 1);
 		else if (state == EATING)
@@ -55,7 +54,6 @@ void	ps(size_t milsec, size_t state, size_t index, t_table *t)
 			printf("%ld %ld has taken a fork\n", milsec, index + 1);
 		else
 			printf("%ld %ld is thinking\n", milsec, index + 1);
-		return ;
 	}
 	pthread_mutex_unlock(&t->tbl_lck);
 }

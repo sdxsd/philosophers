@@ -47,6 +47,9 @@ static int	death_occurred(t_philo *p, t_table *t)
 	starvation = ts(p->t_since_meal, exact_time());
 	if (starvation >= t->time_to_die)
 	{
+		pthread_mutex_lock(&t->tbl_lck);
+		t->death = TRUE;
+		pthread_mutex_unlock(&t->tbl_lck);
 		printf("%ld %ld has died\n", ts(t->epoch, exact_time()), p->idx + 1);
 		pthread_mutex_unlock(&p->self_lck);
 		return (TRUE);
@@ -90,9 +93,6 @@ void	big_brother(t_table *table)
 		ret = check_philo(table);
 		if (ret == SATED || ret == DEATH)
 		{
-			pthread_mutex_lock(&table->tbl_lck);
-			table->death = TRUE;
-			pthread_mutex_unlock(&table->tbl_lck);
 			free_table(table);
 			break ;
 		}
