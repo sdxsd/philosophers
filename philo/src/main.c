@@ -41,6 +41,7 @@ A program is free software if users have all of these freedoms.
 #include <stdio.h>
 #include <unistd.h>
 
+/* NOTE: Parses parameters from char pointers to integers and initialises variables. */
 static void	set_parameters(t_table *table, int args, char **argv)
 {
 	table->death = FALSE;
@@ -55,6 +56,7 @@ static void	set_parameters(t_table *table, int args, char **argv)
 		table->p_to_eat = 0;
 }
 
+/* NOTE: Initialises the main struct holding the simulation parameters. */
 int	construct_table(t_table *table, int args, char **argv)
 {
 	if (!chk_args(argv + 1) || args > 6 || args < 5)
@@ -74,6 +76,16 @@ int	construct_table(t_table *table, int args, char **argv)
 	return (SUCCESS);
 }
 
+/* NOTE: */
+/* Parses the arguments and initialises the table struct with */
+/* simulation parameters. */
+/* Then allocates the philosophers before starting [n_philo] threads. */
+/* Runs the big_brother() function to monitor the philosophers state */
+/* during the simulation. */
+/* Big brother will return either if a philosopher has died; or if the meal count */
+/* rule is specified, in which case it will return upon all philosophers having eaten */
+/* [table.p_to_eat] times. */
+/* Finally deallocates the table and returns 0. */
 int	main(int argc, char	*argv[])
 {
 	t_table	table;

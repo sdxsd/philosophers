@@ -40,6 +40,11 @@ A program is free software if users have all of these freedoms.
 #include "../include/philosophers.h"
 #include <stdio.h>
 
+/* NOTE: */
+/* This function simply checks if a philosopher has starved. */
+/* If this is the case, then the global death variable is set to TRUE and */
+/* a message is printed announcing the death. */
+/* Otherwise the function simply returns. */
 static int	death_occurred(t_philo *p, t_table *t)
 {
 	size_t	starvation;
@@ -57,6 +62,18 @@ static int	death_occurred(t_philo *p, t_table *t)
 	return (FALSE);
 }
 
+/* NOTE: */
+/* This function monitors the state of the philosophers. */
+/* If a philosopher dies, or all philosophers are */
+/* finished eating when [t->meal_limit] == TRUE then the function returns. */
+/* The philosophers are set up as a circular linked list, hence one can */
+/* iterate through all philosophers in an infinite loop by constantly changing */
+/* the [nietzche] pointer to the [r_philo] pointer. */
+/* Each loop, the function checks if the philo has eaten enough to be */
+/* considered sated. If this is the case, the [sated_count] variable */
+/* is incremented; otherwise sated_count is reset to 0. */
+/* Then it is checked if the philsopher has died, i.e. the time since */
+/* since it has last eaten is greater than the time it can go hungry. */
 void	big_brother(t_table *t, t_philo *nietzche)
 {
 	size_t	sated_count;
@@ -82,6 +99,10 @@ void	big_brother(t_table *t, t_philo *nietzche)
 	}
 }
 
+/* NOTE: */
+/* Called by the philosophers durring acc_usleep to check if the death boolean */
+/* has been set to TRUE within the main struct. */
+/* If it has, all forks are unlocked and the thread exits. */
 void	check_death(t_philo *p, t_table *t)
 {
 	pthread_mutex_lock(&t->tbl_lck);

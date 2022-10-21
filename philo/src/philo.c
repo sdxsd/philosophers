@@ -43,6 +43,8 @@ A program is free software if users have all of these freedoms.
 #include "../include/philosophers.h"
 #include <stdlib.h>
 
+/* NOTE: Simply assigns values. */
+/* This function exists to save on lines. */
 static void	set_values(t_philo *philo, int index)
 {
 	philo->t_eaten = 0;
@@ -51,6 +53,13 @@ static void	set_values(t_philo *philo, int index)
 	philo->t_since_meal = 0;
 }
 
+/* NOTE: */
+/* This function initialises a single philosopher. */
+/* The philo to be returned is allocated on the heap and then has its */
+/* mutex locks activated. Since my philosophers operates by creating a circular */
+/* linked list of philosophers, a right and left philo are also assigned. */
+/* If the philo index is 0, then this indicates that this philo is the first to be allocated */
+/* and thus the argument l_philo is null, as the left philo will be allocated later. */
 static t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 {
 	t_philo	*new_philo;
@@ -77,6 +86,7 @@ static t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 	return (new_philo);
 }
 
+/* NOTE: Function that allocates and links philos in a loop. */
 static t_philo	*populate_table(t_philo *ip, t_philo *p1, t_philo **db, int n)
 {
 	t_philo	*p2;
@@ -104,6 +114,20 @@ static t_philo	*populate_table(t_philo *ip, t_philo *p1, t_philo **db, int n)
 	return (p1);
 }
 
+NOTE:
+/* Initialises [n_philo] philo structs. */
+/* Returns them in the form or an array. */
+/* The philos are linked in a circle, hence if [n_philos] == 3 */
+/* then the following graph illustrates the link between the philos */
+/* in memory: */
+/* 	            +---------+ */
+/*  |---------->| philo 1 |-----------| */
+/*  |	        +---------+           | */
+/*  |	                              | */
+/*  |	                              | */
+/*  |  +---------+      +---------+   | */
+/*  |--| philo 3 |<-----| philo 2 |<--| */
+/*     +---------+      +---------+ */
 t_philo	**init_philosophers(int n_philos)
 {
 	t_philo	**philosophers_db;

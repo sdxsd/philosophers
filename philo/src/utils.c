@@ -86,6 +86,7 @@ long	ft_atoi(const char *str)
 	return (nbr);
 }
 
+/* NOTE: Checks a string for illegal characters. */
 static int	chk_string(char *string)
 {
 	while (*(++string) != '\0')
@@ -94,6 +95,7 @@ static int	chk_string(char *string)
 	return (TRUE);
 }
 
+/* NOTE: Checks the programs arguments for invalid input. */
 int	chk_args(char **args)
 {
 	while (*(++args))
