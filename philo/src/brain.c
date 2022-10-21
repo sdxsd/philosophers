@@ -71,7 +71,7 @@ void	philo_sleep(t_philo *philo, t_table *t)
 	philo->state = SLEEPING;
 	piss(ts(t->epoch, exact_time()), philo->state, philo->idx, t);
 	check_death(philo, t);
-	acc_usleep(philo, t,t->time_to_sleep);
+	acc_usleep(philo, t, t->time_to_sleep);
 }
 
 void	philo_eat(t_philo *philo, t_table *t)
@@ -100,7 +100,7 @@ void	*be_philosopher(void *p)
 	philo = (t_philo *)p;
 	table = (t_table *)philo->table;
 	if (philo->idx % 2)
-		usleep(1512);
+		usleep(512);
 	while (TRUE)
 	{
 		philo_eat(philo, table);

@@ -60,10 +60,11 @@ static int	death_occurred(t_philo *p, t_table *t)
 void	big_brother(t_table *t, t_philo *nietzche)
 {
 	size_t	sated_count;
+
 	while (nietzche->r_philo)
 	{
 		pthread_mutex_lock(&nietzche->self_lck);
-		if (nietzche->t_eaten > t->p_to_eat)
+		if (nietzche->t_eaten >= t->p_to_eat)
 			sated_count++;
 		else
 			sated_count = 0;
