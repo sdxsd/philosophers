@@ -43,7 +43,7 @@ A program is free software if users have all of these freedoms.
 #include "../include/philosophers.h"
 #include <stdlib.h>
 
-void	set_values(t_philo *philo, int index)
+static void	set_values(t_philo *philo, int index)
 {
 	philo->t_eaten = 0;
 	philo->state = SLEEPING;
@@ -51,7 +51,7 @@ void	set_values(t_philo *philo, int index)
 	philo->t_since_meal = 0;
 }
 
-t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
+static t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 {
 	t_philo	*new_philo;
 

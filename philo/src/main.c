@@ -38,16 +38,11 @@ A program is free software if users have all of these freedoms.
 */
 
 #include "../include/philosophers.h"
-#include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 
-int	construct_table(t_table *table, int args, char **argv)
+static void	set_parameters(t_table *table, int args, char **argv)
 {
-	if (args > 6 || args < 5)
-		return (FAILURE);
-	if (!chk_args(argv + 1))
-		return (FAILURE);
 	table->death = FALSE;
 	table->n_philo = ft_atoi(argv[1]);
 	table->time_to_die = ft_atoi(argv[2]);
@@ -58,6 +53,13 @@ int	construct_table(t_table *table, int args, char **argv)
 		table->p_to_eat = ft_atoi(argv[5]);
 	else
 		table->p_to_eat = 0;
+}
+
+int	construct_table(t_table *table, int args, char **argv)
+{
+	if (!chk_args(argv + 1) || args > 6 || args < 5)
+		return (FAILURE);
+	set_parameters(table, args, argv);
 	if (table->n_philo < 2 || (table->p_to_eat == 0 && table->meal_limit))
 	{
 		if (!(table->p_to_eat == 0 && table->meal_limit))
@@ -79,13 +81,10 @@ int	main(int argc, char	*argv[])
 	if (!construct_table(&table, argc, argv))
 		return (FAILURE);
 	table.philo_db = init_philosophers(table.n_philo);
-	if (!table.philo_db && table.n_philo > 2)
+	if (!table.philo_db)
 		return (FAILURE);
 	if (!init_threads(table.n_philo, table.philo_db, &table))
-	{
-		free_table(&table);
-		return (-1);
-	}
+		return (free_table(&table));
 	big_brother(&table, table.philo_db[0]);
 	free_table(&table);
 	return (0);

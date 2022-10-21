@@ -39,20 +39,12 @@ A program is free software if users have all of these freedoms.
 
 #include "../include/philosophers.h"
 #include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 
 void	join_threads(int n_philo, pthread_t *thread_db)
 {
-	int	iter;
-
-	iter = 0;
-	while (iter < n_philo)
-	{
-		pthread_join(thread_db[iter], NULL);
-		iter++;
-	}
-	return ;
+	while (n_philo-- > 0)
+		pthread_join(thread_db[n_philo], NULL);
+	free(thread_db);
 }
 
 int	init_threads(int n_philo, t_philo **p_db, t_table *t)

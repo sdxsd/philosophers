@@ -38,6 +38,7 @@ A program is free software if users have all of these freedoms.
 */
 
 #include "../include/philosophers.h"
+#include <limits.h>
 
 static int	ft_isspace(char c)
 {
@@ -83,4 +84,24 @@ long	ft_atoi(const char *str)
 	if (minus == -1)
 		nbr = (nbr - (nbr * 2));
 	return (nbr);
+}
+
+static int	chk_string(char *string)
+{
+	while (*(++string) != '\0')
+		if (!(*string >= '0' && *string <= '9'))
+			return (FALSE);
+	return (TRUE);
+}
+
+int	chk_args(char **args)
+{
+	while (*(++args))
+	{
+		if (!chk_string(*args))
+			return (FALSE);
+		if (ft_atoi(*args) > INT_MAX || ft_atoi(*args) < INT_MIN)
+			return (FALSE);
+	}
+	return (TRUE);
 }

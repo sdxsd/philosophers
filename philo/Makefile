@@ -13,7 +13,6 @@ CFILES = \
 		src/threads.c \
 		src/time.c \
 		src/utils.c \
-		src/parse.c \
 		src/free.c \
 		src/monitoring.c \
 		src/philo.c

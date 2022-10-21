@@ -88,10 +88,10 @@ typedef struct s_table {
 
 /* THREAD FUNCTIONS */
 int		init_threads(int n_philo, t_philo **p_db, t_table *t);
+void	join_threads(int n_philo, pthread_t *thread_db);
 
 /* PHILOSOPHER FUNCTIONS */
 t_philo	**init_philosophers(int n_philos);
-t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index);
 void	ps(size_t milsec, size_t state, size_t index, t_table *t);
 void	*be_philosopher(void *p);
 void	check_death(t_philo *p, t_table *t);
@@ -106,15 +106,10 @@ void	acc_usleep(t_philo *p, t_table *t, size_t milliseconds);
 
 /* DEALLOCATION FUNCTIONS */
 void	free_philosophers(t_philo **p_db, int n_philo);
-void	*free_table(t_table *t);
-void	join_threads(int n_philo, pthread_t *thread_db);
+int		free_table(t_table *t);
 
 /* UTILITY FUNCTIONS */
-long	ft_atoi(const char *str);
-int		chk_string(char *string);
 int		chk_args(char **args);
-
-/* TABLE CONSTRUCTION FUNCTIONS */
-int		construct_table(t_table *table, int args, char **argv);
+long	ft_atoi(const char *str);
 
 #endif // PHILOSOPHERS_H
