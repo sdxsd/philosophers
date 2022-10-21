@@ -114,7 +114,7 @@ static t_philo	*populate_table(t_philo *ip, t_philo *p1, t_philo **db, int n)
 	return (p1);
 }
 
-NOTE:
+/* NOTE: */
 /* Initialises [n_philo] philo structs. */
 /* Returns them in the form or an array. */
 /* The philos are linked in a circle, hence if [n_philos] == 3 */
