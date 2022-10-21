@@ -82,11 +82,11 @@ void	philo_eat(t_philo *philo, t_table *t)
 	piss(ts(t->epoch, exact_time()), TKE_FORK, philo->idx, t);
 	philo->state = EATING;
 	piss(ts(t->epoch, exact_time()), philo->state, philo->idx, t);
-	acc_usleep(philo, t, t->time_to_eat);
 	pthread_mutex_lock(&philo->self_lck);
 	philo->t_since_meal = exact_time();
 	philo->t_eaten++;
 	pthread_mutex_unlock(&philo->self_lck);
+	acc_usleep(philo, t, t->time_to_eat);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(&philo->r_fork);
 }
