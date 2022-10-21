@@ -76,7 +76,8 @@ int	main(int argc, char	*argv[])
 {
 	t_table	table;
 
-	construct_table(&table, argc, argv);
+	if (!construct_table(&table, argc, argv))
+		return (FAILURE);
 	table.philo_db = init_philosophers(table.n_philo);
 	if (!table.philo_db && table.n_philo > 2)
 		return (FAILURE);
@@ -85,6 +86,7 @@ int	main(int argc, char	*argv[])
 		free_table(&table);
 		return (-1);
 	}
-	big_brother(&table);
+	big_brother(&table, table.philo_db[0]);
+	free_table(&table);
 	return (0);
 }

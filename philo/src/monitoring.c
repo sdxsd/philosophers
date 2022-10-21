@@ -57,12 +57,9 @@ static int	death_occurred(t_philo *p, t_table *t)
 	return (FALSE);
 }
 
-static int	check_philo(t_table *t)
+void	big_brother(t_table *t, t_philo *nietzche)
 {
 	size_t	sated_count;
-	t_philo	*nietzche;
-
-	nietzche = t->philo_db[0];
 	while (nietzche->r_philo)
 	{
 		pthread_mutex_lock(&nietzche->self_lck);
@@ -71,30 +68,15 @@ static int	check_philo(t_table *t)
 		else
 			sated_count = 0;
 		if (death_occurred(nietzche, t))
-			return (DEATH);
+			return ;
 		pthread_mutex_unlock(&nietzche->self_lck);
 		nietzche = nietzche->r_philo;
-		if (sated_count == t->n_philo)
-			break ;
-	}
-	if (t->meal_limit)
-		return (SATED);
-	else
-		return (CONTINUE);
-}
-
-/* Big brother is always watching  */
-void	big_brother(t_table *table)
-{
-	int		ret;
-
-	while (TRUE)
-	{
-		ret = check_philo(table);
-		if (ret == SATED || ret == DEATH)
+		if (sated_count == t->n_philo && t->meal_limit)
 		{
-			free_table(table);
-			break ;
+			pthread_mutex_lock(&t->tbl_lck);
+			t->death = TRUE;
+			pthread_mutex_unlock(&t->tbl_lck);
+			return ;
 		}
 	}
 }
