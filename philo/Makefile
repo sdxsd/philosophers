@@ -5,7 +5,7 @@
 # @version 0.1
 
 CC = gcc
-CFLAGS = -g -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread
 NAME = philo
 CFILES = \
 		src/main.c \
