@@ -89,21 +89,33 @@ long	ft_atoi(const char *str)
 /* NOTE: Checks a string for illegal characters. */
 static int	chk_string(char *string)
 {
-	while (*(++string) != '\0')
-		if (!(*string >= '0' && *string <= '9'))
+	int	iter;
+
+	iter = 0;
+	while (string[iter] != '\0')
+	{
+		if (!(string[iter] >= '0' && string[iter] <= '9'))
 			return (FALSE);
+		iter++;
+	}
 	return (TRUE);
 }
 
 /* NOTE: Checks the programs arguments for invalid input. */
 int	chk_args(char **args)
 {
-	while (*(++args))
+	long	arg_int;
+	int		iter;
+
+	iter = 0;
+	while (args[iter])
 	{
-		if (!chk_string(*args))
+		if (!chk_string(args[iter]))
 			return (FALSE);
-		if (ft_atoi(*args) > INT_MAX || ft_atoi(*args) < INT_MIN)
+		arg_int = ft_atoi(args[iter]);
+		if (arg_int > INT_MAX || arg_int < INT_MIN || arg_int < 0)
 			return (FALSE);
+		iter++;
 	}
 	return (TRUE);
 }
