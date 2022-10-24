@@ -113,6 +113,8 @@ int	chk_args(char **args)
 		if (!chk_string(args[iter]))
 			return (FALSE);
 		arg_int = ft_atoi(args[iter]);
+		if (iter == 0 && arg_int < 1)
+			return (FALSE);
 		if (arg_int > INT_MAX || arg_int < INT_MIN || arg_int < 0)
 			return (FALSE);
 		iter++;
