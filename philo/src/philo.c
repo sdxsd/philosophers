@@ -56,10 +56,15 @@ static void	set_values(t_philo *philo, int index)
 /* NOTE: */
 /* This function initialises a single philosopher. */
 /* The philo to be returned is allocated on the heap and then has its */
-/* mutex locks activated. Since my philosophers operates by creating a circular */
-/* linked list of philosophers, a right and left philo are also assigned. */
-/* If the philo index is 0, then this indicates that this philo is the first to be allocated */
-/* and thus the argument l_philo is null, as the left philo will be allocated later. */
+/* mutex locks activated. */
+/* Since my philosophers operates by creating a circular */
+/* linked list of philosophers, */
+/* a right and left philo are also assigned. */
+/* If the philo index is 0, */
+/* then this indicates that this philo */
+/* is the first to be allocated */
+/* and thus the argument l_philo is null, */
+/* as the left philo will be allocated later. */
 static t_philo	*init_philosopher(t_philo *l_philo, t_philo *r_philo, int index)
 {
 	t_philo	*new_philo;

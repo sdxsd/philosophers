@@ -67,7 +67,7 @@ static int	death_occurred(t_philo *p, t_table *t)
 /* If a philosopher dies, or all philosophers are */
 /* finished eating when [t->meal_limit] == TRUE then the function returns. */
 /* The philosophers are set up as a circular linked list, hence one can */
-/* iterate through all philosophers in an infinite loop by constantly changing */
+/* iterate through all philosophers in an infinite loop by changing */
 /* the [nietzche] pointer to the [r_philo] pointer. */
 /* Each loop, the function checks if the philo has eaten enough to be */
 /* considered sated. If this is the case, the [sated_count] variable */
@@ -100,7 +100,8 @@ void	big_brother(t_table *t, t_philo *nietzche)
 }
 
 /* NOTE: */
-/* Called by the philosophers durring acc_usleep to check if the death boolean */
+/* Called by the philosophers durring acc_usleep */
+/* to check if the death boolean */
 /* has been set to TRUE within the main struct. */
 /* If it has, all forks are unlocked and the thread exits. */
 void	check_death(t_philo *p, t_table *t)
